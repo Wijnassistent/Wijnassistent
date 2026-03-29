@@ -1,0 +1,17 @@
+{
+  "name": "Somly",
+  "short_name": "Somly",
+  "description": "Slimme wijnen, betere keuzes",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080408",
+  "theme_color": "#080408",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23080408'/><g fill='none' stroke='%23C9A24A' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'><path d='M76 30 Q96 26 116 30 Q112 72 96 80 Q80 72 76 30 Z'/><path d='M82 56 Q96 62 110 56'/><line x1='96' y1='80' x2='96' y2='118'/><path d='M84 130 Q96 136 108 130'/></g></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
