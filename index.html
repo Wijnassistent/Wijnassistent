@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mijn Wijn Adviseur</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2D0A1E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wijn">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burgundy: #2D0A1E;
+    --deep: #1A0611;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #F5EDD8;
+    --muted: #9A8070;
+    --glass: rgba(201,168,76,0.08);
+    --border: rgba(201,168,76,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--deep);
+    color: var(--cream);
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(80,10,40,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(60,5,25,0.3) 0%, transparent 50%);
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  header::before {
+    content: '🍷';
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+  }
+  header p {
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* NAV TABS */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 1.5rem 1rem 0;
+    flex-wrap: wrap;
+  }
+  nav button {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  nav button.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+  nav button:hover { color: var(--gold-light); }
+
+  /* MAIN */
+  main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2rem 1.2rem 4rem;
+  }
+
+  .tab-panel { display: none; animation: fadeIn 0.4s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+  /* CARDS */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.8rem;
+    margin-bottom: 1.2rem;
+  }
+  .card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+  .card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+  }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 1px dashed var(--border);
+    border-radius: 2px;
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .upload-zone:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+  .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-zone .icon { font-size: 2.2rem; margin-bottom: 0.7rem; }
+  .upload-zone p { font-size: 0.85rem; color: var(--muted); letter-spacing: 0.1em; }
+  .upload-zone .hint { font-size: 0.72rem; margin-top: 0.4rem; color: rgba(154,128,112,0.6); }
+
+  #photo-preview {
+    max-width: 200px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    margin: 1rem auto;
+    display: none;
+  }
+
+  /* FORM ELEMENTS */
+  label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  input[type=text], input[type=number], textarea, select {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--cream);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.65rem 0.9rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--gold); }
+  select option { background: var(--deep); }
+  textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width:500px) { .form-row { grid-template-columns: 1fr; } }
+
+  /* BUTTONS */
+  .btn {
+    background: none;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 0.75rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 1px;
+  }
+  .btn:hover { background: var(--gold); color: var(--deep); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #A07830);
+    color: var(--deep);
+    border-color: transparent;
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+
+  /* AI RESPONSE BOX */
+  .ai-box {
+    background: rgba(45,10,30,0.6);
+    border-left: 3px solid var(--gold);
+    padding: 1.2rem 1.4rem;
+    margin-top: 1.2rem;
+    display: none;
+    border-radius: 0 2px 2px 0;
+  }
+  .ai-box.show { display: block; animation: fadeIn 0.4s ease; }
+  .ai-box .ai-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+  .ai-box p { font-size: 0.9rem; line-height: 1.7; color: var(--cream); }
+
+  /* WINE LIST */
+  .wine-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .wine-item:last-child { border-bottom: none; }
+  .wine-emoji { font-size: 1.8rem; flex-shrink: 0; }
+  .wine-info { flex: 1; }
+  .wine-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--gold-light); }
+  .wine-meta { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+  .wine-score {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* STARS */
+  .stars { color: var(--gold); letter-spacing: 2px; font-size: 1.1rem; }
+
+  /* LOADING */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 1rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+  }
+  .loading.show { display: block; }
+  .dot-anim::after {
+    content: '';
+    animation: dots 1.4s infinite;
+  }
+  @keyframes dots {
+    0%,20%{content:'.'} 40%{content:'..'} 60%,100%{content:'...'}
+  }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .badge-red { background: rgba(120,20,40,0.4); color: #E08080; border: 1px solid rgba(120,20,40,0.6); }
+  .badge-white { background: rgba(200,180,100,0.15); color: var(--gold-light); border: 1px solid var(--border); }
+  .badge-rose { background: rgba(200,80,100,0.15); color: #F0A0A0; border: 1px solid rgba(200,80,100,0.3); }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--muted);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* COPY BTN */
+  .copy-btn {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  /* PREFERENCES */
+  .pref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width:500px) { .pref-grid { grid-template-columns: 1fr; } }
+
+  .slider-row { margin-bottom: 1rem; }
+  .slider-row label { margin-bottom: 0.6rem; }
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--gold);
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 0;
+  }
+  .slider-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* AANBEVELINGEN */
+  .deal-card {
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.2rem;
+    margin-bottom: 0.8rem;
+    background: var(--glass);
+    position: relative;
+    overflow: hidden;
+  }
+  .deal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .deal-price { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--gold); }
+  .deal-original { font-size: 0.8rem; color: var(--muted); text-decoration: line-through; margin-left: 0.5rem; }
+  .deal-saving { font-size: 0.7rem; color: #80C080; letter-spacing: 0.1em; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Mijn Wijn Adviseur</h1>
+  <p>Persoonlijke Sommelier · Gedreven door AI</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('kelder')">🏺 Kelder</button>
+  <button onclick="showTab('toevoegen')">📸 Toevoegen</button>
+  <button onclick="showTab('proeven')">🥂 Proeven</button>
+  <button onclick="showTab('aanbevelingen')">✨ Aanbevelingen</button>
+  <button onclick="showTab('voorkeuren')">⚙️ Voorkeuren</button>
+</nav>
+
+<main>
+
+  <!-- KELDER TAB -->
+  <div id="tab-kelder" class="tab-panel active">
+    <div class="card">
+      <h2>Mijn Wijnkelder</h2>
+      <div id="wine-list">
+        <!-- Voorbeeldwijnen -->
+        <div class="wine-item">
+          <div class="wine-emoji">🍷</div>
+          <div class="wine-info">
+            <div class="wine-name">Château Léoville Barton 2016</div>
+            <div class="wine-meta">Saint-Julien, Bordeaux · Van: Jan (verjaardag) · 2 fl.</div>
+            <div style="margin-top:0.4rem"><span class="badge badge-red">Rood</span></div>
+          </div>
+          <div class="wine-score">94/100</div>
+        </div>
+        <div class="wine-item">
+          <div class="wine-emoji">🥂</div>
+          <div class="wine-info">
+            <div class="wine-name">Domaine Leflaive Mâcon-Verzé 2021</div>
+            <div class="wine-meta">Bourgogne · Gekocht bij Gall &amp; Gall · 1 fl.</div>
+            <div style="margin-top:0.4rem"><span class="badge badge-white">Wit</span></div>
+          </div>
+          <div class="wine-score">89/100</div>
+        </div>
+        <div class="wine-item">
+          <div class="wine-emoji">🌹</div>
+          <div class="wine-info">
+            <div class="wine-name">Whispering Angel 2022</div>
+            <div class="wine-meta">Provence · Van: Sophie · 3 fl.</div>
+            <div style="margin-top:0.4rem"><span class="badge badge-rose">Rosé</span></div>
+          </div>
+          <div class="wine-score">—</div>
+        </div>
+      </div>
+      <div style="margin-top:1.2rem;text-align:center;color:var(--muted);font-size:0.8rem;">
+        6 flessen in kelder · Geschatte waarde: ~€ 285
+      </div>
+    </div>
+  </div>
+
+  <!-- TOEVOEGEN TAB -->
+  <div id="tab-toevoegen" class="tab-panel">
+    <div class="card">
+      <h2>Nieuwe Fles Toevoegen</h2>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.4rem;">Upload een foto van het etiket — ik herken de wijn en stel je een paar vragen.</p>
+
+      <div class="upload-zone" onclick="document.getElementById('upload-add').click()">
+        <input type="file" id="upload-add" accept="image/*" onchange="handleAddPhoto(event)">
+        <div class="icon">📷</div>
+        <p>Tap om foto te maken of te uploaden</p>
+        <p class="hint">JPG, PNG · Etiket duidelijk zichtbaar</p>
+      </div>
+      <img id="photo-preview" />
+
+      <div id="add-questions" style="display:none;margin-top:1.4rem;">
+        <div class="section-title">Vertel me meer</div>
+        <label>Waar heb je deze wijn vandaan?</label>
+        <select id="add-source">
+          <option value="">— Kies een optie —</option>
+          <option value="cadeau">Cadeau gekregen</option>
+          <option value="gekocht">Zelf gekocht</option>
+          <option value="meegenomen">Meegenomen van reis</option>
+          <option value="anders">Anders</option>
+        </select>
+
+        <div id="cadeau-fields" style="display:none">
+          <label>Van wie heb je hem gekregen?</label>
+          <input type="text" id="add-giver" placeholder="Naam van de gever">
+          <label>Bij welke gelegenheid?</label>
+          <input type="text" id="add-occasion" placeholder="bijv. verjaardag, bedankje...">
+        </div>
+
+        <div id="koop-fields" style="display:none">
+          <label>Waar gekocht &amp; prijs (optioneel)?</label>
+          <div class="form-row">
+            <input type="text" id="add-shop" placeholder="bijv. Gall &amp; Gall, Vinora...">
+            <input type="number" id="add-price" placeholder="€ prijs">
+          </div>
+        </div>
+
+        <label>Hoeveel flessen?</label>
+        <input type="number" id="add-bottles" value="1" min="1">
+
+        <label>Notities (optioneel)</label>
+        <textarea id="add-notes" placeholder="bijv. speciaal jaar, aanbevolen door..."></textarea>
+
+        <button class="btn btn-primary" onclick="addWine()">Opslaan in Kelder</button>
+      </div>
+
+      <div class="loading" id="add-loading"><span class="dot-anim">Etiket herkennen</span></div>
+      <div class="ai-box" id="add-ai">
+        <div class="ai-label">✦ Wijn Adviseur</div>
+        <p id="add-ai-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROEVEN TAB -->
+  <div id="tab-proeven" class="tab-panel">
+    <div class="card">
+      <h2>Proefnotitie</h2>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.4rem;">Upload de fles die je gaat drinken. Ik help je een WSET niveau 2 notitie te maken.</p>
+
+      <div class="upload-zone" onclick="document.getElementById('upload-taste').click()">
+        <input type="file" id="upload-taste" accept="image/*" onchange="handleTastePhoto(event)">
+        <div class="icon">🥂</div>
+        <p>Foto van de fles die je openttrekt</p>
+        <p class="hint">Ik herken de wijn automatisch</p>
+      </div>
+      <img id="taste-preview" style="max-width:200px;display:none;margin:1rem auto;border-radius:2px;border:1px solid var(--border);" />
+
+      <div id="taste-form" style="display:none;margin-top:1.4rem;">
+        <div class="section-title">WSET Niveau 2 Proefnotitie</div>
+
+        <div class="form-row">
+          <div>
+            <label>Helderheid</label>
+            <select id="t-clarity"><option>Helder</option><option>Troebel</option></select>
+          </div>
+          <div>
+            <label>Intensiteit kleur</label>
+            <select id="t-color-int"><option>Licht</option><option>Medium</option><option>Diep</option></select>
+          </div>
+        </div>
+
+        <label>Neus — Aromakarakter</label>
+        <textarea id="t-nose" placeholder="bijv. rood fruit, kruiden, aardsheid, hout..."></textarea>
+
+        <div class="form-row">
+          <div>
+            <label>Zoetheid</label>
+            <select id="t-sweet"><option>Droog</option><option>Off-dry</option><option>Zoet</option></select>
+          </div>
+          <div>
+            <label>Zuurgraad</label>
+            <select id="t-acid"><option>Laag</option><option>Medium</option><option>Hoog</option></select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label>Tannines</label>
+            <select id="t-tannin"><option>N.v.t. (wit)</option><option>Laag</option><option>Medium</option><option>Hoog</option></select>
+          </div>
+          <div>
+            <label>Alcohol</label>
+            <select id="t-alc"><option>Laag</option><option>Medium</option><option>Hoog</option></select>
+          </div>
+        </div>
+
+        <label>Body</label>
+        <select id="t-body"><option>Licht</option><option>Medium</option><option>Vol</option></select>
+
+        <label>Smaak &amp; Afdronk</label>
+        <textarea id="t-finish" placeholder="Beschrijf de smaak en hoe lang de afdronk is..."></textarea>
+
+        <label>Persoonlijke indruk</label>
+        <textarea id="t-impression" placeholder="Wat vond je er van? Zou je hem kopen? Past hij bij je smaak?"></textarea>
+
+        <label>Score (50–100)</label>
+        <input type="number" id="t-score" min="50" max="100" placeholder="bijv. 88">
+
+        <button class="btn btn-primary" onclick="saveTasting()">Notitie Opslaan &amp; AI Analyse</button>
+      </div>
+
+      <div class="loading" id="taste-loading"><span class="dot-anim">Wijn herkennen</span></div>
+      <div class="ai-box" id="taste-ai">
+        <div class="ai-label">✦ Sommelier Analyse</div>
+        <p id="taste-ai-text"></p>
+        <div id="message-box" style="display:none;margin-top:1rem;">
+          <div class="section-title">Bedankbericht</div>
+          <textarea id="message-text" style="min-height:120px;"></textarea>
+          <button class="btn copy-btn" onclick="copyMessage()">📋 Kopiëren</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AANBEVELINGEN TAB -->
+  <div id="tab-aanbevelingen" class="tab-panel">
+    <div class="card">
+      <h2>Maandelijkse Aanbevelingen</h2>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.4rem;">Budget: <strong style="color:var(--gold)">€ 100</strong> · Gebaseerd op jouw smaakprofiel · Actuele aanbiedingen</p>
+      <button class="btn btn-primary" onclick="getRecommendations()">✨ Genereer Aanbevelingen</button>
+
+      <div class="loading" id="rec-loading" style="margin-top:1rem;"><span class="dot-anim">Aanbiedingen zoeken en analyseren</span></div>
+      <div id="rec-results" style="margin-top:1.4rem;display:none;"></div>
+    </div>
+  </div>
+
+  <!-- VOORKEUREN TAB -->
+  <div id="tab-voorkeuren" class="tab-panel">
+    <div class="card">
+      <h2>Mijn Smaakprofiel</h2>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.4rem;">Vertel me wat je lekker vindt — ik gebruik dit voor alle adviezen.</p>
+
+      <div class="pref-grid">
+        <div>
+          <label>Favoriete stijl</label>
+          <select id="p-style">
+            <option>Rood (droog, vol)</option>
+            <option>Rood (licht, fruitig)</option>
+            <option>Wit (droog, fris)</option>
+            <option>Wit (vol, gerijpt)</option>
+            <option>Rosé</option>
+            <option>Gemengd</option>
+          </select>
+        </div>
+        <div>
+          <label>Budget per fles</label>
+          <select id="p-budget">
+            <option>€ 10–15</option>
+            <option>€ 15–25</option>
+            <option selected>€ 25–40</option>
+            <option>€ 40–60</option>
+            <option>€ 60+</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Voorkeur voor hout / eik</label>
+        <input type="range" min="0" max="4" value="2" id="p-oak">
+        <div class="slider-labels"><span>Geen hout</span><span>Veel hout</span></div>
+      </div>
+
+      <div class="slider-row">
+        <label>Tannines</label>
+        <input type="range" min="0" max="4" value="2" id="p-tannin">
+        <div class="slider-labels"><span>Zacht</span><span>Stevig</span></div>
+      </div>
+
+      <div class="slider-row">
+        <label>Zuurgraad</label>
+        <input type="range" min="0" max="4" value="2" id="p-acid">
+        <div class="slider-labels"><span>Laag</span><span>Levendig</span></div>
+      </div>
+
+      <label>Favoriete regio's</label>
+      <input type="text" id="p-regions" placeholder="bijv. Bordeaux, Bourgogne, Toscane, Rhône...">
+
+      <label>Niet-gewenste druivenrassen</label>
+      <input type="text" id="p-avoid" placeholder="bijv. Gewürztraminer, Merlot...">
+
+      <label>Gelegenheid (waarvoor drink je het meest?)</label>
+      <select id="p-occasion">
+        <option>Doordeweeks bij het eten</option>
+        <option>Weekenddinners</option>
+        <option>Feestjes &amp; gasten ontvangen</option>
+        <option>Speciale gelegenheden</option>
+        <option>Alles</option>
+      </select>
+
+      <label>Extra info voor de adviseur</label>
+      <textarea id="p-extra" placeholder="bijv. ik hou van rijpe, warme stijlen · ik drink zelden wit · ik bewaar sommige flessen 5+ jaar..."></textarea>
+
+      <button class="btn btn-primary" onclick="savePreferences()">Voorkeuren Opslaan</button>
+      <div class="ai-box" id="pref-ai" style="margin-top:1rem;">
+        <div class="ai-label">✦ Profiel Opgeslagen</div>
+        <p id="pref-ai-text"></p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ========== STORAGE ==========
+function getStorage() {
+  try { return JSON.parse(localStorage.getItem('wijn_data') || '{}'); } catch { return {}; }
+}
+function setStorage(data) {
+  try { localStorage.setItem('wijn_data', JSON.stringify(data)); } catch {}
+}
+
+// ========== TABS ==========
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const buttons = document.querySelectorAll('nav button');
+  const map = {kelder:0,toevoegen:1,proeven:2,aanbevelingen:3,voorkeuren:4};
+  buttons[map[name]].classList.add('active');
+}
+
+// ========== CLAUDE API ==========
+async function askClaude(prompt, systemPrompt) {
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      system: systemPrompt || "Je bent een persoonlijke wijn sommelier. Antwoord altijd in het Nederlands. Wees warm, kennis­rijk en beknopt.",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await response.json();
+  return data.content?.[0]?.text || "Er ging iets mis.";
+}
+
+// ========== TOEVOEGEN ==========
+function handleAddPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const preview = document.getElementById('photo-preview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+
+    document.getElementById('add-loading').classList.add('show');
+
+    // Stuur naar Claude met base64 image
+    const base64 = e.target.result.split(',')[1];
+    const mediaType = file.type;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: "Je bent een expert wijn sommelier. Analyseer wijnetiketten en geef beknopte info. Antwoord in het Nederlands.",
+          messages: [{
+            role: "user",
+            content: [
+              { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+              { type: "text", text: "Analyseer dit wijnetiket. Geef: 1) Naam van de wijn, 2) Regio/appellation, 3) Jaar, 4) Druivenras (indien bekend), 5) Een korte 2-zin beschrijving van de stijl. Houd het beknopt." }
+            ]
+          }]
+        })
+      });
+      const data = await response.json();
+      const text = data.content?.[0]?.text || "Kon etiket niet lezen.";
+
+      document.getElementById('add-loading').classList.remove('show');
+      document.getElementById('add-ai-text').textContent = text;
+      document.getElementById('add-ai').classList.add('show');
+      document.getElementById('add-questions').style.display = 'block';
+    } catch(err) {
+      document.getElementById('add-loading').classList.remove('show');
+      document.getElementById('add-ai-text').textContent = "Etiket herkenning mislukt. Vul gegevens handmatig in.";
+      document.getElementById('add-ai').classList.add('show');
+      document.getElementById('add-questions').style.display = 'block';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('add-source')?.addEventListener('change', function() {
+  document.getElementById('cadeau-fields').style.display = this.value === 'cadeau' ? 'block' : 'none';
+  document.getElementById('koop-fields').style.display = this.value === 'gekocht' ? 'block' : 'none';
+});
+
+function addWine() {
+  const data = getStorage();
+  if (!data.wines) data.wines = [];
+  data.wines.push({
+    added: new Date().toISOString(),
+    source: document.getElementById('add-source').value,
+    giver: document.getElementById('add-giver')?.value || '',
+    occasion: document.getElementById('add-occasion')?.value || '',
+    shop: document.getElementById('add-shop')?.value || '',
+    price: document.getElementById('add-price')?.value || '',
+    bottles: document.getElementById('add-bottles').value,
+    notes: document.getElementById('add-notes').value,
+    aiDescription: document.getElementById('add-ai-text').textContent
+  });
+  setStorage(data);
+  alert('✓ Wijn toegevoegd aan je kelder!');
+  showTab('kelder');
+}
+
+// ========== PROEVEN ==========
+function handleTastePhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const preview = document.getElementById('taste-preview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.getElementById('taste-loading').classList.add('show');
+
+    const base64 = e.target.result.split(',')[1];
+    const mediaType = file.type;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 500,
+          system: "Je bent een sommelier. Identificeer de wijn van het etiket en geef enkel naam, jaar en regio. Antwoord in het Nederlands.",
+          messages: [{
+            role: "user",
+            content: [
+              { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+              { type: "text", text: "Welke wijn is dit? Geef enkel: naam, jaar, regio." }
+            ]
+          }]
+        })
+      });
+      const data = await response.json();
+      document.getElementById('taste-loading').classList.remove('show');
+      document.getElementById('taste-form').style.display = 'block';
+      document.getElementById('taste-ai-text').textContent = "Wijn herkend: " + (data.content?.[0]?.text || "onbekend");
+      document.getElementById('taste-ai').classList.add('show');
+    } catch {
+      document.getElementById('taste-loading').classList.remove('show');
+      document.getElementById('taste-form').style.display = 'block';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveTasting() {
+  const wijnInfo = document.getElementById('taste-ai-text').textContent;
+  const notitie = {
+    helderheid: document.getElementById('t-clarity').value,
+    kleur: document.getElementById('t-color-int').value,
+    neus: document.getElementById('t-nose').value,
+    zoetheid: document.getElementById('t-sweet').value,
+    zuur: document.getElementById('t-acid').value,
+    tannine: document.getElementById('t-tannin').value,
+    alcohol: document.getElementById('t-alc').value,
+    body: document.getElementById('t-body').value,
+    smaak: document.getElementById('t-finish').value,
+    indruk: document.getElementById('t-impression').value,
+    score: document.getElementById('t-score').value
+  };
+
+  const data = getStorage();
+  const giver = data.wines?.find(w => w.aiDescription?.toLowerCase().includes('wijn'))?.giver || '';
+
+  document.getElementById('taste-loading').classList.add('show');
+
+  const prompt = `
+Ik heb zojuist gedronken: ${wijnInfo}
+WSET notitie: ${JSON.stringify(notitie)}
+${giver ? `Deze wijn was een cadeau van: ${giver}` : ''}
+
+1. Geef een professionele WSET-stijl samenvatting van mijn proefnotitie (3-4 zinnen).
+2. ${giver ? `Schrijf een persoonlijk, warm bedankbericht dat ik naar ${giver} kan sturen voor deze wijn. Houd het authentiek en enthousiast.` : 'Geef tips voor spijscombinatie bij deze wijn.'}
+  `;
+
+  try {
+    const result = await askClaude(prompt);
+    document.getElementById('taste-loading').classList.remove('show');
+    document.getElementById('taste-ai-text').textContent = result;
+    document.getElementById('taste-ai').classList.add('show');
+
+    if (giver) {
+      // Extract bericht gedeelte
+      const messageBox = document.getElementById('message-box');
+      const msgText = document.getElementById('message-text');
+      msgText.value = result.split('\n').slice(-5).join('\n').trim();
+      messageBox.style.display = 'block';
+    }
+  } catch {
+    document.getElementById('taste-loading').classList.remove('show');
+  }
+}
+
+function copyMessage() {
+  const text = document.getElementById('message-text').value;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✓ Gekopieerd!';
+    setTimeout(() => btn.textContent = '📋 Kopiëren', 2000);
+  });
+}
+
+// ========== AANBEVELINGEN ==========
+async function getRecommendations() {
+  const data = getStorage();
+  const prefs = data.preferences || {};
+  document.getElementById('rec-loading').classList.add('show');
+  document.getElementById('rec-results').style.display = 'none';
+
+  const prompt = `
+Ik zoek maandelijkse wijn aanbevelingen met een budget van €100 totaal.
+
+Mijn smaakprofiel:
+- Stijl: ${prefs.style || 'Rood (droog, vol)'}
+- Budget per fles: ${prefs.budget || '€25-40'}
+- Favoriete regio's: ${prefs.regions || 'Bordeaux, Bourgogne, Rhône'}
+- Te vermijden: ${prefs.avoid || '-'}
+- Hout voorkeur (0-4): ${prefs.oak || 2}
+- Extra: ${prefs.extra || ''}
+
+Geef 3-4 concrete wijn aanbevelingen die:
+1. Goede prijs/kwaliteit hebben (aanbiedingen, deals bij Nederlandse wijnhandels)
+2. Passen bij mijn smaak
+3. Samen binnen €100 vallen
+
+Voor elke wijn: naam, jaar, regio, normale prijs, aanbiedingsprijs, besparing, korte reden, waar te koop in NL.
+
+Formaat als JSON array: [{naam, jaar, regio, normal_prijs, deal_prijs, besparing_pct, reden, winkel}]
+Geef ALLEEN de JSON terug, geen andere tekst.
+  `;
+
+  try {
+    const result = await askClaude(prompt);
+    document.getElementById('rec-loading').classList.remove('show');
+
+    let wines = [];
+    try {
+      wines = JSON.parse(result.replace(/```json|```/g, '').trim());
+    } catch {
+      // fallback: toon raw tekst
+      document.getElementById('rec-results').innerHTML = `<div class="card"><p style="color:var(--cream)">${result}</p></div>`;
+      document.getElementById('rec-results').style.display = 'block';
+      return;
+    }
+
+    const html = wines.map(w => `
+      <div class="deal-card">
+        <div style="margin-bottom:0.5rem">
+          <span class="badge badge-red">${w.jaar || ''}</span>
+          <span style="margin-left:0.5rem;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em">${w.regio || ''}</span>
+        </div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold-light);margin-bottom:0.4rem">${w.naam}</div>
+        <div style="margin-bottom:0.6rem">
+          <span class="deal-price">€${w.deal_prijs}</span>
+          <span class="deal-original">€${w.normal_prijs}</span>
+          <span class="deal-saving">−${w.besparing_pct}%</span>
+        </div>
+        <p style="font-size:0.83rem;color:var(--cream);line-height:1.6;margin-bottom:0.5rem">${w.reden}</p>
+        <p style="font-size:0.72rem;color:var(--muted)">📍 ${w.winkel}</p>
+      </div>
+    `).join('');
+
+    document.getElementById('rec-results').innerHTML = html;
+    document.getElementById('rec-results').style.display = 'block';
+
+  } catch(err) {
+    document.getElementById('rec-loading').classList.remove('show');
+    document.getElementById('rec-results').innerHTML = `<p style="color:var(--muted)">Fout bij ophalen aanbevelingen.</p>`;
+    document.getElementById('rec-results').style.display = 'block';
+  }
+}
+
+// ========== VOORKEUREN ==========
+// ========== SERVICE WORKER ==========
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+function savePreferences() {
+  const data = getStorage();
+  data.preferences = {
+    style: document.getElementById('p-style').value,
+    budget: document.getElementById('p-budget').value,
+    oak: document.getElementById('p-oak').value,
+    tannin: document.getElementById('p-tannin').value,
+    acid: document.getElementById('p-acid').value,
+    regions: document.getElementById('p-regions').value,
+    avoid: document.getElementById('p-avoid').value,
+    occasion: document.getElementById('p-occasion').value,
+    extra: document.getElementById('p-extra').value
+  };
+  setStorage(data);
+
+  document.getElementById('pref-ai-text').textContent =
+    `Profiel opgeslagen! Ik gebruik deze voorkeuren voortaan voor al je aanbevelingen en analyses. Je kunt dit altijd aanpassen.`;
+  document.getElementById('pref-ai').classList.add('show');
+}
+</script>
+</body>
+</html>
