@@ -178,8 +178,8 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
 <!-- TOEVOEGEN -->
 <div id="tab-toevoegen" class="tab-panel">
   <div class="sec">Fles(sen) Toevoegen</div>
+  <input type="file" id="up-add" accept="image/*" style="display:none" onchange="handleAddPhoto(event)">
   <div class="upload-zone" onclick="document.getElementById('up-add').click()">
-    <input type="file" id="up-add" accept="image/*" onchange="handleAddPhoto(event)">
     <div class="icon">📷</div>
     <p>Foto van één of meerdere flessen</p>
     <p class="hint">AI herkent alle etiketten automatisch</p>
@@ -222,8 +222,8 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
 <!-- PROEVEN -->
 <div id="tab-proeven" class="tab-panel">
   <div class="sec">Proefnotitie · WSET Niveau 2</div>
+  <input type="file" id="up-taste" accept="image/*" style="display:none" onchange="handleTastePhoto(event)">
   <div class="upload-zone" onclick="document.getElementById('up-taste').click()">
-    <input type="file" id="up-taste" accept="image/*" onchange="handleTastePhoto(event)">
     <div class="icon">🥂</div>
     <p>Foto van de fles die je openttrekt</p>
     <p class="hint">Automatische herkenning</p>
@@ -404,7 +404,18 @@ async function claude(prompt,system,b64,mt){
   return j.content?.[0]?.text||'';
 }
 
-function toB64(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result.split(',')[1]); r.onerror=()=>rej(new Error('Leesfout')); r.readAsDataURL(f); }); }
+function toB64(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>{ const parts=e.target.result.split(','); const mt=parts[0].match(/:(.*?);/)?.[1]||'image/jpeg'; const safe=mt==='image/heic'||mt==='image/heif'?'image/jpeg':mt; res({b64:parts[1],mt:safe}); }; r.onerror=()=>rej(new Error('Leesfout')); r.readAsDataURL(f); }); }
+
+function parseWineJSON(text){
+  // Strip markdown code blocks
+  let clean=text.replace(/```json/gi,'').replace(/```/g,'').trim();
+  // Find JSON array in response
+  const match=clean.match(/\[[\s\S]*\]/);
+  if(match){ try{ const r=JSON.parse(match[0]); if(Array.isArray(r)&&r.length) return r; }catch{} }
+  // Try full parse
+  try{ const r=JSON.parse(clean); if(Array.isArray(r)) return r; if(r&&r.name) return [r]; }catch{}
+  return null;
+}
 
 document.getElementById('add-src')?.addEventListener('change',function(){
   document.getElementById('cad-fields').style.display=this.value==='cadeau'?'block':'none';
@@ -413,20 +424,28 @@ document.getElementById('add-src')?.addEventListener('change',function(){
 
 async function handleAddPhoto(e){
   const f=e.target.files[0]; if(!f) return;
-  const pr=document.getElementById('add-prev');
-  const fr=new FileReader(); fr.onload=x=>{pr.src=x.target.result;pr.style.display='block';}; fr.readAsDataURL(f);
+  const fr=new FileReader();
+  fr.onload=x=>{const p=document.getElementById('add-prev');p.src=x.target.result;p.style.display='block';};
+  fr.readAsDataURL(f);
   document.getElementById('add-load').classList.add('show');
   document.getElementById('add-ai').classList.remove('show');
   document.getElementById('det-wines').style.display='none';
   try{
-    const b64=await toB64(f);
+    const {b64,mt}=await toB64(f);
     const res=await claude(
-      'Analyseer dit beeld. Er kunnen één of meerdere wijnflessen op staan. Identificeer ALLE zichtbare flessen. Geef ALLEEN een JSON array terug:\n[{"name":"volledige naam","year":"jaar of null","region":"regio","type":"rood/wit/rosé/schuim","grape":"druif","style":"1 zin beschrijving"}]',
-      'Je bent een expert wijn sommelier die etiketten herkent. Geef ALLEEN geldige JSON terug.',
-      b64,f.type);
-    let wines=[];
-    try{ wines=JSON.parse(res.replace(/```json|```/g,'').trim()); if(!Array.isArray(wines)) wines=[wines]; }
-    catch{ wines=[{name:'Onbekende wijn',year:null,region:'',type:'rood',grape:'',style:res.substring(0,100)}]; }
+      'Analyseer dit beeld. Identificeer ALLE zichtbare wijnflessen op basis van de etiketten. Geef je antwoord als een JSON array en niets anders. Formaat:\n[{"name":"volledige wijnnaam","year":"jaar als string of null","region":"regio/appellation","type":"rood of wit of rose of schuim","grape":"druivenras","style":"korte stijlomschrijving in 1 zin"}]\nAls er geen wijnfles te zien is, geef dan: [{"name":"Geen wijn herkend","year":null,"region":"","type":"rood","grape":"","style":""}]',
+      'Je bent een expert wijn sommelier. Geef ALTIJD en ALLEEN een geldige JSON array terug. Geen uitleg, geen tekst buiten de JSON.',
+      b64,mt);
+    const wines=parseWineJSON(res);
+    if(!wines||!wines.length){
+      document.getElementById('add-ai-txt').textContent='Kon geen wijn herkennen. Vul handmatig in. (AI zei: '+res.substring(0,120)+')';
+      document.getElementById('add-ai').classList.add('show');
+      detected=[{name:'',year:null,region:'',type:'rood',grape:'',style:''}];
+      document.getElementById('det-list').innerHTML=`<div class="detected-item"><div class="chk on" id="chk0" onclick="tog(0)">✓</div><input type="text" placeholder="Wijnnaam" style="flex:1;background:transparent;border:none;border-bottom:0.5px solid var(--border);color:var(--cream);padding:0.3rem" id="man-name"></div>`;
+      document.getElementById('det-wines').style.display='block';
+      document.getElementById('add-load').classList.remove('show');
+      return;
+    }
     detected=wines;
     document.getElementById('add-ai-txt').textContent=`${wines.length} fles${wines.length>1?'sen':''} herkend`;
     document.getElementById('add-ai').classList.add('show');
@@ -437,10 +456,10 @@ async function handleAddPhoto(e){
       </div>`).join('');
     document.getElementById('det-wines').style.display='block';
   }catch(err){
-    document.getElementById('add-ai-txt').textContent='Herkenning mislukt: '+err.message;
+    document.getElementById('add-ai-txt').textContent='Fout: '+err.message;
     document.getElementById('add-ai').classList.add('show');
     detected=[{name:'',year:null,region:'',type:'rood',grape:'',style:''}];
-    document.getElementById('det-list').innerHTML=`<div class="detected-item"><div class="chk on" id="chk0" onclick="tog(0)">✓</div><input type="text" placeholder="Wijnnaam" style="flex:1" id="man-name"></div>`;
+    document.getElementById('det-list').innerHTML=`<div class="detected-item"><div class="chk on" id="chk0" onclick="tog(0)">✓</div><input type="text" placeholder="Wijnnaam" style="flex:1;background:transparent;border:none;border-bottom:0.5px solid var(--border);color:var(--cream);padding:0.3rem" id="man-name"></div>`;
     document.getElementById('det-wines').style.display='block';
   }
   document.getElementById('add-load').classList.remove('show');
@@ -475,8 +494,8 @@ async function handleTastePhoto(e){
   document.getElementById('taste-id').classList.remove('show');
   document.getElementById('taste-form').style.display='none';
   try{
-    const b64=await toB64(f);
-    const res=await claude('Welke wijn is dit? Geef naam, jaar, regio en druivenras. Beknopt.',null,b64,f.type);
+    const {b64,mt}=await toB64(f);
+    const res=await claude('Welke wijn is dit? Geef naam, jaar, regio en druivenras. Beknopt.',null,b64,mt);
     document.getElementById('taste-id-txt').textContent=res;
     document.getElementById('taste-id').classList.add('show');
     document.getElementById('taste-form').style.display='block';
