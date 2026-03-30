@@ -334,6 +334,12 @@ input[type=range] { width:100%; accent-color:var(--terra); background:none; bord
       <div id="gift-nudge-area"></div>
       <div class="sec">Mijn kelder</div>
       <div id="wine-list"></div>
+      <div class="sec" style="margin-top:0.5rem">Aanbevelingen voor jou</div>
+      <div style="padding:0 1.2rem 0.8rem">
+        <button class="btn-primary" onclick="getRecs()" id="rec-btn">✦ Genereer topdeals (€100 budget)</button>
+      </div>
+      <div class="loading" id="rec-load" style="padding:1rem 1.2rem"><span class="dot">Topdeals zoeken</span></div>
+      <div id="rec-results"></div>
     </div>
 
     <!-- SCAN / TOEVOEGEN -->
