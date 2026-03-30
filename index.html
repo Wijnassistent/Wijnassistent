@@ -34,13 +34,13 @@ body {
   padding-bottom:env(safe-area-inset-bottom);
 }
 header {
-  text-align:center; padding:2.2rem 1rem 1rem;
+  text-align:center; padding:2.5rem 1rem 1.2rem;
   border-bottom:0.5px solid var(--border);
   background:var(--black); position:sticky; top:0; z-index:100;
 }
-.logo-wrap svg { width:48px; height:60px; }
-header h1 { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--gold); letter-spacing:0.12em; margin-top:0.25rem; }
-header p { font-size:0.6rem; letter-spacing:0.28em; color:var(--muted); margin-top:0.15rem; }
+.logo-wrap svg { width:64px; height:80px; }
+header h1 { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:300; color:var(--gold); letter-spacing:0.12em; margin-top:0.3rem; }
+header p { font-size:0.7rem; letter-spacing:0.28em; color:var(--muted); margin-top:0.2rem; }
 nav {
   display:flex; background:var(--black);
   border-bottom:0.5px solid var(--border);
@@ -50,38 +50,38 @@ nav::-webkit-scrollbar { display:none; }
 nav button {
   flex:1; min-width:58px; background:none; border:none;
   border-bottom:1.5px solid transparent; color:var(--muted);
-  font-family:'Raleway',sans-serif; font-size:0.58rem;
+  font-family:'Raleway',sans-serif; font-size:0.65rem;
   letter-spacing:0.16em; text-transform:uppercase;
-  padding:0.65rem 0.3rem 0.5rem; cursor:pointer; transition:all 0.3s;
-  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:0.8rem 0.3rem 0.65rem; cursor:pointer; transition:all 0.3s;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
 }
-nav button .ni { font-size:0.95rem; }
+nav button .ni { font-size:1.1rem; }
 nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
 nav button:hover { color:var(--gold-light); }
-main { max-width:680px; margin:0 auto; padding:1.4rem 1rem 5rem; }
+main { max-width:680px; margin:0 auto; padding:1.6rem 1.1rem 5rem; }
 .tab-panel { display:none; animation:fadeIn 0.3s ease; }
 .tab-panel.active { display:block; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-.sec { font-size:0.58rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--muted); padding-bottom:0.55rem; border-bottom:0.5px solid var(--border); margin-bottom:0.9rem; }
-.card { background:var(--gold-faint); border:0.5px solid var(--border); border-radius:2px; padding:1.3rem; margin-bottom:0.9rem; }
-.card h2 { font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold-light); margin-bottom:0.7rem; font-weight:400; }
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.55rem; margin-bottom:1.1rem; }
-.stat-box { background:var(--gold-faint); border:0.5px solid var(--border); border-radius:2px; padding:0.75rem 0.4rem; text-align:center; }
-.stat-num { font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--gold); }
-.stat-lbl { font-size:0.55rem; letter-spacing:0.16em; color:var(--muted); margin-top:0.1rem; }
-.wine-item { display:flex; align-items:center; gap:0.75rem; padding:0.8rem 0; border-bottom:0.5px solid var(--border); }
+.sec { font-size:0.65rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--muted); padding-bottom:0.55rem; border-bottom:0.5px solid var(--border); margin-bottom:0.9rem; }
+.card { background:var(--gold-faint); border:0.5px solid var(--border); border-radius:2px; padding:1.4rem; margin-bottom:0.9rem; }
+.card h2 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--gold-light); margin-bottom:0.8rem; font-weight:400; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.6rem; margin-bottom:1.2rem; }
+.stat-box { background:var(--gold-faint); border:0.5px solid var(--border); border-radius:2px; padding:0.9rem 0.5rem; text-align:center; }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--gold); }
+.stat-lbl { font-size:0.62rem; letter-spacing:0.16em; color:var(--muted); margin-top:0.15rem; }
+.wine-item { display:flex; align-items:center; gap:0.85rem; padding:0.95rem 0; border-bottom:0.5px solid var(--border); }
 .wine-item:last-child { border-bottom:none; }
-.wine-dot { width:30px; height:30px; border-radius:50%; border:0.5px solid var(--gold-dim); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.8rem; }
+.wine-dot { width:36px; height:36px; border-radius:50%; border:0.5px solid var(--gold-dim); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem; }
 .wine-dot.red { background:rgba(74,14,26,0.45); }
 .wine-dot.white { background:rgba(201,162,74,0.1); }
 .wine-dot.rose { background:rgba(180,60,80,0.15); }
 .wine-dot.moss { background:var(--moss-dim); }
 .wine-info { flex:1; min-width:0; }
-.wine-name { font-family:'Cormorant Garamond',serif; font-size:0.95rem; color:var(--gold-light); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.wine-meta { font-size:0.68rem; color:var(--muted); margin-top:0.12rem; }
+.wine-name { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--gold-light); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.wine-meta { font-size:0.78rem; color:var(--muted); margin-top:0.15rem; }
 .wine-right { display:flex; align-items:center; gap:0.4rem; flex-shrink:0; }
-.wine-score { font-family:'Cormorant Garamond',serif; font-size:0.88rem; color:var(--gold); }
-.del-btn { background:none; border:none; color:rgba(201,162,74,0.2); cursor:pointer; font-size:0.75rem; padding:0.2rem; transition:color 0.2s; }
+.wine-score { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--gold); }
+.del-btn { background:none; border:none; color:rgba(201,162,74,0.2); cursor:pointer; font-size:0.85rem; padding:0.2rem; transition:color 0.2s; }
 .del-btn:hover { color:rgba(200,60,60,0.7); }
 .badge { display:inline-block; padding:0.12rem 0.45rem; font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; border-radius:1px; }
 .badge-red { background:rgba(74,14,26,0.5); color:#E08080; border:0.5px solid rgba(120,20,40,0.5); }
@@ -95,29 +95,50 @@ main { max-width:680px; margin:0 auto; padding:1.4rem 1rem 5rem; }
 .upload-zone p { font-size:0.75rem; color:var(--muted); letter-spacing:0.08em; }
 .upload-zone .hint { font-size:0.62rem; color:rgba(201,162,74,0.3); margin-top:0.25rem; }
 .img-prev { max-width:160px; border:0.5px solid var(--border); border-radius:2px; margin:0.7rem auto; display:none; }
-label { display:block; font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:0.3rem; }
+label { display:block; font-size:0.65rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:0.35rem; }
 input[type=text],input[type=number],textarea,select {
   width:100%; background:rgba(0,0,0,0.4); border:0.5px solid var(--border); border-radius:2px;
-  color:var(--cream); font-family:'Raleway',sans-serif; font-size:0.82rem;
-  padding:0.55rem 0.75rem; margin-bottom:0.8rem; outline:none; transition:border-color 0.3s; -webkit-appearance:none;
+  color:var(--cream); font-family:'Raleway',sans-serif; font-size:1rem;
+  padding:0.7rem 0.9rem; margin-bottom:0.9rem; outline:none; transition:border-color 0.3s; -webkit-appearance:none;
 }
 input:focus,textarea:focus,select:focus { border-color:var(--gold); }
 select option { background:var(--black); }
-textarea { min-height:75px; resize:vertical; line-height:1.6; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.7rem; }
+textarea { min-height:85px; resize:vertical; line-height:1.6; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
 @media(max-width:380px){.form-row{grid-template-columns:1fr;}}
-.btn { background:none; border:0.5px solid var(--gold); color:var(--gold); font-family:'Raleway',sans-serif; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.65rem 1.4rem; cursor:pointer; transition:all 0.3s; border-radius:1px; }
+.btn { background:none; border:0.5px solid var(--gold); color:var(--gold); font-family:'Raleway',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.8rem 1.6rem; cursor:pointer; transition:all 0.3s; border-radius:1px; }
 .btn:hover { background:var(--gold); color:var(--black); }
 .btn-primary { background:linear-gradient(135deg,var(--gold),#8A6020); color:var(--black); border-color:transparent; font-weight:500; }
 .btn-primary:hover { background:var(--gold-light); }
-.ai-box { background:rgba(8,4,8,0.8); border-left:1.5px solid var(--gold); padding:0.9rem 1.1rem; margin-top:0.9rem; display:none; border-radius:0 2px 2px 0; }
+.ai-box { background:rgba(8,4,8,0.8); border-left:1.5px solid var(--gold); padding:1rem 1.2rem; margin-top:1rem; display:none; border-radius:0 2px 2px 0; }
 .ai-box.show { display:block; animation:fadeIn 0.35s ease; }
-.ai-label { font-size:0.55rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:0.45rem; }
-.ai-box p { font-size:0.82rem; line-height:1.75; color:var(--cream); white-space:pre-wrap; }
-.loading { display:none; text-align:center; padding:0.7rem; color:var(--muted); font-size:0.72rem; letter-spacing:0.14em; }
+.ai-label { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem; }
+.ai-box p { font-size:0.95rem; line-height:1.8; color:var(--cream); white-space:pre-wrap; }
+.loading { display:none; text-align:center; padding:0.8rem; color:var(--muted); font-size:0.78rem; letter-spacing:0.14em; }
 .loading.show { display:block; }
 .dot-anim::after { content:''; animation:dots 1.4s infinite; }
 @keyframes dots { 0%,20%{content:'.'} 40%{content:'..'} 60%,100%{content:'...'} }
+
+/* CHAT */
+.chat-wrap { display:flex; flex-direction:column; height:calc(100vh - 220px); min-height:400px; }
+.chat-messages { flex:1; overflow-y:auto; padding:0.5rem 0; margin-bottom:1rem; }
+.chat-msg { display:flex; gap:0.7rem; margin-bottom:1rem; animation:fadeIn 0.3s ease; }
+.chat-msg.user { flex-direction:row-reverse; }
+.chat-avatar { width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; }
+.chat-avatar.ai { background:var(--moss-dim); border:0.5px solid rgba(42,61,42,0.8); color:#90C090; }
+.chat-avatar.user { background:var(--gold-faint); border:0.5px solid var(--border); color:var(--gold); }
+.chat-bubble { max-width:80%; padding:0.75rem 1rem; border-radius:2px; font-size:0.95rem; line-height:1.7; }
+.chat-bubble.ai { background:rgba(42,61,42,0.25); border:0.5px solid rgba(42,61,42,0.6); color:var(--cream); border-radius:0 8px 8px 8px; }
+.chat-bubble.user { background:var(--gold-faint); border:0.5px solid var(--border); color:var(--cream); border-radius:8px 0 8px 8px; text-align:right; }
+.chat-input-row { display:flex; gap:0.6rem; align-items:flex-end; }
+.chat-input { flex:1; background:rgba(0,0,0,0.4); border:0.5px solid var(--border); border-radius:2px; color:var(--cream); font-family:'Raleway',sans-serif; font-size:0.95rem; padding:0.75rem 0.9rem; outline:none; transition:border-color 0.3s; resize:none; min-height:46px; max-height:120px; -webkit-appearance:none; margin-bottom:0; }
+.chat-input:focus { border-color:var(--gold); }
+.chat-send { background:linear-gradient(135deg,var(--gold),#8A6020); border:none; color:var(--black); font-size:1.1rem; width:46px; height:46px; border-radius:2px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.chat-typing { display:none; padding:0.5rem 0; }
+.chat-typing.show { display:flex; gap:0.7rem; align-items:center; }
+.chat-suggestions { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; }
+.chat-sug { background:var(--gold-faint); border:0.5px solid var(--border); border-radius:12px; padding:0.4rem 0.9rem; font-size:0.75rem; color:var(--muted); cursor:pointer; transition:all 0.2s; }
+.chat-sug:hover { border-color:var(--gold); color:var(--gold); }
 .moss-card { background:var(--moss-dim); border:0.5px solid rgba(42,61,42,0.8); border-radius:2px; padding:1rem 1.1rem; margin-bottom:0.75rem; position:relative; }
 .moss-card::before { content:''; position:absolute; top:0;left:0;right:0; height:1.5px; background:linear-gradient(90deg,#3A5A3A,transparent); }
 .deal-name { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--gold-light); margin-bottom:0.3rem; }
@@ -187,6 +208,7 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
   <button class="active" onclick="showTab('kelder')"><span class="ni">⬡</span>Kelder</button>
   <button onclick="showTab('toevoegen')"><span class="ni">◎</span>Toevoegen</button>
   <button onclick="showTab('proeven')"><span class="ni">◇</span>Proeven</button>
+  <button onclick="showTab('sommelier')"><span class="ni">💬</span>Sommelier</button>
   <button onclick="showTab('advies')"><span class="ni">✦</span>Advies</button>
   <button onclick="showTab('profiel')"><span class="ni">⚙</span>Profiel</button>
 </nav>
@@ -295,6 +317,33 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
   </div>
 </div>
 
+<!-- SOMMELIER CHAT -->
+<div id="tab-sommelier" class="tab-panel">
+  <div class="sec">Persoonlijke Sommelier</div>
+  <div class="chat-wrap">
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-msg">
+        <div class="chat-avatar ai">S</div>
+        <div class="chat-bubble ai" id="chat-welcome">Hoi! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel. Wat kan ik voor je doen?</div>
+      </div>
+    </div>
+    <div class="chat-suggestions" id="chat-sugs">
+      <div class="chat-sug" onclick="sendSug(this)">Welke wijn drink ik vanavond?</div>
+      <div class="chat-sug" onclick="sendSug(this)">Wat past bij een ribeye?</div>
+      <div class="chat-sug" onclick="sendSug(this)">Welke fles moet ik het eerst drinken?</div>
+      <div class="chat-sug" onclick="sendSug(this)">Advies voor een feestje?</div>
+    </div>
+    <div class="chat-typing" id="chat-typing">
+      <div class="chat-avatar ai">S</div>
+      <div class="chat-bubble ai"><span class="dot-anim">Aan het nadenken</span></div>
+    </div>
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chat-input" placeholder="Stel een vraag over wijn..." rows="1" onkeydown="chatKeydown(event)"></textarea>
+      <button class="chat-send" onclick="sendChat()">↑</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADVIES -->
 <div id="tab-advies" class="tab-panel">
   <div class="sec">Maandelijkse Aanbevelingen</div>
@@ -311,6 +360,8 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
 <div id="tab-profiel" class="tab-panel">
   <div class="sec">Mijn Smaakprofiel</div>
   <div class="card">
+    <label>Jouw naam (voor persoonlijke aanspreekvorm)</label>
+    <input type="text" id="p-name" placeholder="bijv. Niels">
     <div class="form-row">
       <div><label>Favoriete stijl</label>
         <select id="p-st">
@@ -403,10 +454,80 @@ function showTab(n){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+n).classList.add('active');
-  const m={kelder:0,toevoegen:1,proeven:2,advies:3,profiel:4};
+  const m={kelder:0,toevoegen:1,proeven:2,sommelier:3,advies:4,profiel:5};
   document.querySelectorAll('nav button')[m[n]].classList.add('active');
   if(n==='kelder') renderKelder();
   if(n==='profiel') loadPrefs();
+  if(n==='sommelier') initChat();
+}
+
+let chatHistory = [];
+let chatInited = false;
+
+function initChat(){
+  if(chatInited) return;
+  chatInited = true;
+  const d=getData();
+  const name = d.preferences?.name || '';
+  const welcome = name ? `Hoi ${name}! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel. Wat kan ik voor je doen?` : 'Hoi! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel. Wat kan ik voor je doen?';
+  document.getElementById('chat-welcome').textContent = welcome;
+}
+
+function getChatContext(){
+  const d=getData();
+  const wines=d.wines||[];
+  const prefs=d.preferences||{};
+  const kelder=wines.length ? wines.map(w=>`- ${w.name||'?'}${w.year?' '+w.year:''} (${w.type||'rood'}, ${w.region||'?'})${w.score?' score:'+w.score:''}`).join('\n') : 'Kelder is leeg.';
+  return `Je bent een persoonlijke wijn sommelier die altijd informeel praat (je/jij). Je kent de kelder en voorkeuren van de gebruiker.\n\nKELDER:\n${kelder}\n\nSMAKEN:\n- Stijl: ${prefs.style||'niet ingesteld'}\n- Regio's: ${prefs.regions||'niet ingesteld'}\n- Hout: ${prefs.oak||2}/4\n- Extra: ${prefs.extra||''}\n\nGeef concrete, persoonlijke adviezen op basis van de kelder. Wees enthousiast en to the point. Antwoord in het Nederlands.`;
+}
+
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  const msg=input.value.trim();
+  if(!msg) return;
+  input.value='';
+  input.style.height='46px';
+  document.getElementById('chat-sugs').style.display='none';
+  addChatMsg(msg,'user');
+  chatHistory.push({role:'user',content:msg});
+  document.getElementById('chat-typing').classList.add('show');
+  scrollChat();
+  try{
+    const res=await fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:getChatContext(),messages:chatHistory})});
+    const j=await res.json();
+    if(!res.ok) throw new Error(j.error?.message||'API fout');
+    const reply=j.content?.[0]?.text||'';
+    chatHistory.push({role:'assistant',content:reply});
+    document.getElementById('chat-typing').classList.remove('show');
+    addChatMsg(reply,'ai');
+    scrollChat();
+  }catch(err){
+    document.getElementById('chat-typing').classList.remove('show');
+    addChatMsg('Sorry, er ging iets mis: '+err.message,'ai');
+  }
+}
+
+function addChatMsg(text,type){
+  const el=document.createElement('div');
+  el.className='chat-msg'+(type==='user'?' user':'');
+  el.innerHTML=`<div class="chat-avatar ${type}">${type==='ai'?'S':'jij'}</div><div class="chat-bubble ${type}">${text.replace(/\n/g,'<br>')}</div>`;
+  document.getElementById('chat-messages').appendChild(el);
+}
+
+function scrollChat(){
+  const el=document.getElementById('chat-messages');
+  el.scrollTop=el.scrollHeight;
+}
+
+function sendSug(el){
+  document.getElementById('chat-input').value=el.textContent;
+  sendChat();
+}
+
+function chatKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChat(); }
+  const t=e.target; t.style.height='auto'; t.style.height=Math.min(t.scrollHeight,120)+'px';
 }
 
 function renderKelder(){
@@ -619,6 +740,7 @@ async function getRecs(){
 
 function loadPrefs(){
   const p=getData().preferences||{};
+  if(p.name) document.getElementById('p-name').value=p.name;
   if(p.style) document.getElementById('p-st').value=p.style;
   if(p.budget) document.getElementById('p-bu').value=p.budget;
   if(p.oak!==undefined) document.getElementById('p-oa').value=p.oak;
@@ -632,7 +754,7 @@ function loadPrefs(){
 
 function savePrefs(){
   const d=getData();
-  d.preferences={style:document.getElementById('p-st').value,budget:document.getElementById('p-bu').value,oak:document.getElementById('p-oa').value,tannin:document.getElementById('p-ta').value,acid:document.getElementById('p-ac').value,regions:document.getElementById('p-re').value,avoid:document.getElementById('p-av').value,occasion:document.getElementById('p-oc').value,extra:document.getElementById('p-ex').value};
+  d.preferences={name:document.getElementById('p-name').value,style:document.getElementById('p-st').value,budget:document.getElementById('p-bu').value,oak:document.getElementById('p-oa').value,tannin:document.getElementById('p-ta').value,acid:document.getElementById('p-ac').value,regions:document.getElementById('p-re').value,avoid:document.getElementById('p-av').value,occasion:document.getElementById('p-oc').value,extra:document.getElementById('p-ex').value};
   setData(d);
   document.getElementById('pref-ok-txt').textContent='Profiel opgeslagen. Alle aanbevelingen zijn nu op jou afgestemd.';
   document.getElementById('pref-ok').classList.add('show');
