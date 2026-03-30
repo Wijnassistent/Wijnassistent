@@ -887,7 +887,10 @@ async function getRecs(){
         <div class="deal-name">${w.naam}</div>
         <div class="deal-price-row"><span class="deal-price">€${w.deal}</span><span class="deal-orig">€${w.normaal}</span><span class="deal-save">−${w.besparing}</span></div>
         <div class="deal-reden">${w.reden}</div>
-        <div class="deal-shop">📍 ${w.winkel}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.8rem">
+          <div class="deal-shop">📍 ${w.winkel}</div>
+          <a href="https://www.wine-searcher.com/find/${encodeURIComponent(w.naam+(w.jaar?' '+w.jaar:''))}/NL" target="_blank" style="background:var(--terra);color:#fff;font-size:0.72rem;font-weight:500;padding:0.45rem 1rem;border-radius:8px;text-decoration:none;font-family:Inter,sans-serif;white-space:nowrap">Vind in NL →</a>
+        </div>
       </div>`).join('');
   }catch(err){
     document.getElementById('rec-load').classList.remove('show');
