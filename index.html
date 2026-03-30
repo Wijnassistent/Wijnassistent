@@ -5,238 +5,276 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Somly</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0E0A0E">
+<meta name="theme-color" content="#0F1623">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Somly">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black: #0E0A0E;
-  --black2: #181218;
+  --night: #0F1623;
+  --night2: #162030;
+  --night3: #1E2A3A;
+  --night4: #0C1320;
+  --terra: #C17040;
+  --terra-dim: rgba(193,112,64,0.18);
+  --terra-faint: rgba(193,112,64,0.08);
   --gold: #C9A24A;
-  --gold-light: #E8C97A;
-  --gold-dim: rgba(201,162,74,0.3);
-  --gold-faint: rgba(201,162,74,0.09);
-  --moss-dim: rgba(42,61,42,0.5);
-  --cream: #F5EFE0;
-  --cream2: #C8BAA0;
-  --muted: rgba(200,186,160,0.6);
-  --border: rgba(201,162,74,0.22);
+  --ivory: #E8DCC8;
+  --ivory2: #C8BAA0;
+  --slate: #8BA0B8;
+  --slate-dim: rgba(139,160,184,0.12);
+  --border: rgba(139,160,184,0.12);
+  --border2: rgba(193,112,64,0.22);
+  --red-wine: #5A1010;
+  --white-wine: #7A6820;
+  --rose-wine: #7A2030;
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
-  background:var(--black); color:var(--cream);
-  font-family:'Raleway',sans-serif; font-weight:400; font-size:16px; line-height:1.6;
+  background:var(--night); color:var(--ivory);
+  font-family:'Inter',sans-serif; font-weight:400; font-size:16px;
   min-height:100vh; min-height:-webkit-fill-available;
   padding-top:env(safe-area-inset-top);
-  padding-bottom:env(safe-area-inset-bottom);
+  overflow-x:hidden;
 }
+
+/* SETUP */
+#setup {
+  display:none; position:fixed; inset:0; background:var(--night);
+  z-index:999; flex-direction:column; align-items:center; justify-content:center; padding:2rem;
+}
+.setup-brand { text-align:center; margin-bottom:2.5rem; }
+.setup-brand svg { width:52px; height:65px; margin-bottom:0.8rem; }
+.setup-brand h1 { font-family:'Cormorant Garamond',serif; font-size:2.8rem; color:var(--gold); letter-spacing:4px; }
+.setup-brand p { font-size:0.65rem; letter-spacing:2.5px; color:var(--slate); margin-top:0.2rem; }
+.setup-form { width:100%; max-width:380px; }
+.setup-form label { font-size:0.65rem; letter-spacing:2px; color:var(--slate); display:block; margin-bottom:0.4rem; }
+.setup-form input { width:100%; background:var(--night2); border:0.5px solid var(--border2); border-radius:10px; color:var(--ivory); font-family:'Inter',sans-serif; font-size:1rem; padding:0.9rem 1rem; margin-bottom:1rem; outline:none; }
+.setup-form input:focus { border-color:var(--terra); }
+.setup-form button { width:100%; background:var(--terra); border:none; color:#fff; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:500; padding:1rem; border-radius:10px; cursor:pointer; letter-spacing:1px; }
+.setup-hint { font-size:0.72rem; color:var(--slate); text-align:center; margin-top:1rem; line-height:1.6; }
+.setup-hint span { color:var(--terra); }
+
+/* APP */
+#app { display:none; }
 
 /* HEADER */
 header {
-  text-align:center; padding:2.2rem 1rem 1rem;
+  background:var(--night); padding:1.4rem 1.2rem 1rem;
   border-bottom:0.5px solid var(--border);
-  background:var(--black); position:sticky; top:0; z-index:100;
+  position:sticky; top:0; z-index:100;
 }
-.logo-wrap svg { width:60px; height:75px; }
-header h1 { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:300; color:var(--gold); letter-spacing:0.12em; margin-top:0.2rem; }
-header p { font-size:0.7rem; letter-spacing:0.28em; color:var(--muted); margin-top:0.15rem; }
-
-/* NAV */
-nav { display:flex; background:var(--black2); border-bottom:0.5px solid var(--border); overflow-x:auto; scrollbar-width:none; }
-nav::-webkit-scrollbar { display:none; }
-nav button {
-  flex:1; min-width:56px; background:none; border:none; border-bottom:2px solid transparent;
-  color:var(--muted); font-family:'Raleway',sans-serif; font-size:0.65rem;
-  letter-spacing:0.12em; text-transform:uppercase;
-  padding:0.85rem 0.2rem 0.65rem; cursor:pointer; transition:all 0.3s;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-}
-nav button .ni { font-size:1.15rem; }
-nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
+.header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem; }
+.brand { display:flex; align-items:center; gap:10px; }
+.brand svg { width:28px; height:35px; flex-shrink:0; }
+.brand-text {}
+.brand-name { font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--gold); letter-spacing:3px; line-height:1; }
+.brand-tagline { font-size:0.55rem; letter-spacing:2px; color:var(--slate); }
+.header-avatar { width:36px; height:36px; border-radius:50%; background:var(--terra); display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.85rem; font-weight:500; flex-shrink:0; }
+.header-greeting { font-size:0.72rem; color:var(--slate); letter-spacing:1px; margin-top:0.3rem; }
 
 /* MAIN */
-main { max-width:680px; margin:0 auto; padding:1.5rem 1.1rem 5rem; }
-.tab-panel { display:none; animation:fadeIn 0.3s ease; }
-.tab-panel.active { display:block; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+main { padding:0 0 90px; max-width:680px; margin:0 auto; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; animation:fadeUp 0.3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
-/* COMMON */
-.sec { font-size:0.65rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--muted); padding-bottom:0.6rem; border-bottom:0.5px solid var(--border); margin-bottom:1rem; }
-.card { background:var(--gold-faint); border:0.5px solid var(--border); border-radius:3px; padding:1.4rem; margin-bottom:1rem; }
-.card h2 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--gold-light); margin-bottom:0.8rem; font-weight:400; }
+/* BOTTOM NAV */
+.bnav {
+  position:fixed; bottom:0; left:0; right:0;
+  background:var(--night4); border-top:0.5px solid var(--border);
+  display:flex; align-items:center; justify-content:space-around;
+  padding:0.5rem 0.5rem calc(0.5rem + env(safe-area-inset-bottom));
+  z-index:100; max-width:680px; margin:0 auto;
+}
+.bnav-btn {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:none; border:none; cursor:pointer; padding:0.3rem;
+}
+.bnav-icon { font-size:1.3rem; line-height:1; }
+.bnav-label { font-size:0.55rem; letter-spacing:1.5px; color:var(--slate); text-transform:uppercase; }
+.bnav-btn.active .bnav-label { color:var(--terra); }
+.bnav-scan {
+  width:54px; height:54px; border-radius:50%;
+  background:var(--terra); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; margin-top:-16px;
+  box-shadow:0 4px 16px rgba(193,112,64,0.4);
+  border:3px solid var(--night4);
+}
+
+/* SECTION LABEL */
+.sec { font-size:0.6rem; letter-spacing:2.5px; color:var(--slate); text-transform:uppercase; padding:1.2rem 1.2rem 0.6rem; }
+
+/* SCAN HERO */
+.scan-hero {
+  margin:1rem 1.2rem 0;
+  background:var(--night2); border-radius:16px;
+  padding:1.4rem; text-align:center;
+  border:0.5px solid var(--border2);
+  position:relative; overflow:hidden;
+}
+.scan-hero::before { content:''; position:absolute; top:-30px; right:-30px; width:100px; height:100px; border-radius:50%; background:var(--terra-faint); }
+.scan-circle { width:60px; height:60px; border-radius:50%; background:var(--terra); margin:0 auto 0.8rem; display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
+.scan-title { color:var(--ivory); font-size:1rem; font-family:'Cormorant Garamond',serif; margin-bottom:0.3rem; }
+.scan-sub { color:var(--slate); font-size:0.65rem; letter-spacing:1.5px; }
 
 /* STATS */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.6rem; margin-bottom:1.2rem; }
-.stat-box { background:var(--black2); border:0.5px solid var(--border); border-radius:3px; padding:0.9rem 0.4rem; text-align:center; }
-.stat-num { font-family:'Cormorant Garamond',serif; font-size:1.9rem; color:var(--gold); }
-.stat-lbl { font-size:0.62rem; letter-spacing:0.14em; color:var(--muted); margin-top:0.15rem; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.6rem; padding:1rem 1.2rem; }
+.stat { background:var(--night2); border-radius:12px; padding:0.9rem 0.5rem; text-align:center; border:0.5px solid var(--border); }
+.stat-n { font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--ivory); }
+.stat-l { font-size:0.55rem; letter-spacing:1.5px; color:var(--slate); margin-top:0.15rem; }
 
-/* WINE LIST */
-.wine-item { display:flex; align-items:center; gap:0.9rem; padding:1rem 0; border-bottom:0.5px solid var(--border); }
-.wine-item:last-child { border-bottom:none; }
-.wine-dot { width:38px; height:38px; border-radius:50%; border:0.5px solid var(--gold-dim); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem; }
-.wine-dot.red { background:rgba(74,14,26,0.5); }
-.wine-dot.white { background:rgba(201,162,74,0.12); }
-.wine-dot.rose { background:rgba(180,60,80,0.18); }
-.wine-dot.moss { background:var(--moss-dim); }
+/* GIFT NUDGE */
+.gift-nudge {
+  margin:0 1.2rem 0.5rem;
+  background:var(--night2); border-radius:14px;
+  padding:0.9rem 1rem; display:flex; align-items:center; gap:0.8rem;
+  border:0.5px solid var(--border2);
+}
+.gift-nudge-icon { width:36px; height:36px; border-radius:50%; background:var(--terra-dim); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+.gift-nudge-info { flex:1; min-width:0; }
+.gift-nudge-title { color:var(--terra); font-size:0.85rem; margin-bottom:0.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.gift-nudge-sub { color:var(--slate); font-size:0.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.gift-nudge-btn { background:var(--terra); border:none; color:#fff; font-family:'Inter',sans-serif; font-size:0.65rem; font-weight:500; padding:0.45rem 0.9rem; border-radius:8px; cursor:pointer; letter-spacing:1px; flex-shrink:0; }
+
+/* WINE CARDS */
+.wine-card {
+  margin:0 1.2rem 0.7rem;
+  background:var(--night2); border-radius:14px;
+  padding:1rem 1rem 1rem 1.2rem;
+  display:flex; align-items:center; gap:0.9rem;
+  border:0.5px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.wine-card-bar { position:absolute; left:0; top:0; bottom:0; width:3px; }
+.wine-card-bar.red { background:#8B2020; }
+.wine-card-bar.white { background:#B8A060; }
+.wine-card-bar.rose { background:#B04060; }
+.wine-card-bar.sparkling { background:#6080A0; }
+.wine-bottle { width:12px; height:40px; border-radius:6px 6px 2px 2px; flex-shrink:0; }
+.wine-bottle.red { background:var(--red-wine); }
+.wine-bottle.white { background:var(--white-wine); }
+.wine-bottle.rose { background:var(--rose-wine); }
+.wine-bottle.sparkling { background:#203040; }
 .wine-info { flex:1; min-width:0; }
-.wine-name { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.wine-meta { font-size:0.8rem; color:var(--cream2); margin-top:0.15rem; }
-.wine-right { display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
-.wine-score { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--gold); }
-.del-btn { background:none; border:none; color:rgba(201,162,74,0.25); cursor:pointer; font-size:0.9rem; padding:0.3rem; transition:color 0.2s; }
-.del-btn:hover { color:rgba(220,60,60,0.8); }
+.wine-name { color:var(--ivory); font-size:0.95rem; font-family:'Cormorant Garamond',serif; margin-bottom:0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.wine-region { color:var(--slate); font-size:0.72rem; margin-bottom:0.5rem; }
+.wine-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.tag { background:var(--slate-dim); border-radius:8px; padding:2px 7px; font-size:0.65rem; color:var(--slate); }
+.tag.gift { background:var(--terra-dim); color:var(--terra); }
+.wine-right { display:flex; flex-direction:column; align-items:flex-end; gap:0.3rem; flex-shrink:0; }
+.wine-score { font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--ivory); line-height:1; }
+.wine-score-sub { font-size:0.6rem; color:var(--slate); }
+.wine-del { background:none; border:none; color:rgba(139,160,184,0.3); font-size:0.8rem; cursor:pointer; padding:0.2rem; }
 
-/* BADGES */
-.badge { display:inline-block; padding:0.15rem 0.55rem; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; border-radius:2px; }
-.badge-red { background:rgba(74,14,26,0.55); color:#F09090; border:0.5px solid rgba(120,20,40,0.5); }
-.badge-white { background:rgba(201,162,74,0.12); color:var(--gold-light); border:0.5px solid var(--border); }
-.badge-rose { background:rgba(180,60,80,0.18); color:#F0B0B0; border:0.5px solid rgba(180,60,80,0.35); }
-.badge-moss { background:var(--moss-dim); color:#A0D0A0; border:0.5px solid rgba(42,61,42,0.8); }
-
-/* UPLOAD */
-.upload-zone { border:0.5px dashed var(--gold-dim); border-radius:3px; padding:2rem; text-align:center; cursor:pointer; transition:all 0.3s; margin-bottom:1rem; }
-.upload-zone:active { background:var(--gold-faint); }
-.upload-zone .icon { font-size:2rem; margin-bottom:0.5rem; }
-.upload-zone p { font-size:0.95rem; color:var(--cream2); }
-.upload-zone .hint { font-size:0.75rem; color:var(--muted); margin-top:0.3rem; }
-.img-prev { max-width:180px; border:0.5px solid var(--border); border-radius:3px; margin:0.8rem auto; display:none; }
+/* EMPTY */
+.empty { text-align:center; padding:3rem 1.5rem; }
+.empty-icon { font-size:3rem; opacity:0.3; margin-bottom:1rem; }
+.empty p { color:var(--slate); font-size:0.95rem; line-height:1.8; }
 
 /* FORMS */
-label { display:block; font-size:0.65rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem; }
+.form-section { padding:1rem 1.2rem; }
+label.field-label { display:block; font-size:0.6rem; letter-spacing:2px; color:var(--slate); margin-bottom:0.4rem; text-transform:uppercase; }
 input[type=text],input[type=number],input[type=password],textarea,select {
-  width:100%; background:rgba(0,0,0,0.4); border:0.5px solid var(--border); border-radius:3px;
-  color:var(--cream); font-family:'Raleway',sans-serif; font-size:1rem;
-  padding:0.8rem 1rem; margin-bottom:1rem; outline:none; transition:border-color 0.3s; -webkit-appearance:none;
+  width:100%; background:var(--night2); border:0.5px solid var(--border);
+  border-radius:10px; color:var(--ivory); font-family:'Inter',sans-serif;
+  font-size:0.95rem; padding:0.8rem 1rem; margin-bottom:0.9rem;
+  outline:none; transition:border-color 0.2s; -webkit-appearance:none;
 }
-input:focus,textarea:focus,select:focus { border-color:var(--gold); }
-select option { background:var(--black); }
-textarea { min-height:90px; resize:vertical; line-height:1.6; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.9rem; }
-@media(max-width:380px){ .form-row { grid-template-columns:1fr; } }
+input:focus,textarea:focus,select:focus { border-color:var(--terra); }
+select option { background:var(--night); }
+textarea { min-height:85px; resize:vertical; line-height:1.6; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+@media(max-width:360px){ .form-row { grid-template-columns:1fr; } }
 
 /* BUTTONS */
-.btn {
-  background:none; border:1px solid var(--gold); color:var(--gold);
-  font-family:'Raleway',sans-serif; font-size:0.75rem; letter-spacing:0.2em;
-  text-transform:uppercase; padding:0.9rem 1.8rem; cursor:pointer;
-  transition:all 0.2s; border-radius:2px; min-height:50px; display:inline-block;
-}
-.btn:active { transform:scale(0.97); }
-.btn-primary {
-  background:linear-gradient(135deg,var(--gold),#8A6020); color:var(--black);
-  border-color:transparent; font-weight:500; font-size:0.8rem; width:100%;
-}
-.btn-primary:active { background:var(--gold-light); }
-.btn-full { width:100%; text-align:center; }
+.btn-primary { display:block; width:100%; background:var(--terra); border:none; color:#fff; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:500; padding:1rem; border-radius:10px; cursor:pointer; letter-spacing:0.5px; text-align:center; }
+.btn-primary:active { opacity:0.85; }
+.btn-outline { display:block; width:100%; background:none; border:0.5px solid var(--border2); color:var(--terra); font-family:'Inter',sans-serif; font-size:0.85rem; padding:0.9rem; border-radius:10px; cursor:pointer; letter-spacing:0.5px; text-align:center; }
+
+/* UPLOAD ZONE */
+.upload-zone { background:var(--night2); border:0.5px dashed var(--border2); border-radius:14px; padding:2rem; text-align:center; cursor:pointer; margin:1rem 1.2rem; transition:all 0.2s; }
+.upload-zone:active { background:var(--terra-faint); }
+.upload-icon { font-size:2.2rem; margin-bottom:0.6rem; }
+.upload-title { color:var(--ivory); font-size:0.95rem; margin-bottom:0.3rem; font-family:'Cormorant Garamond',serif; }
+.upload-sub { color:var(--slate); font-size:0.72rem; letter-spacing:1px; }
+.img-prev { max-width:160px; border-radius:10px; border:0.5px solid var(--border); margin:0.8rem auto; display:none; }
 
 /* AI BOX */
-.ai-box { background:rgba(5,3,5,0.95); border-left:2px solid var(--gold); padding:1.1rem 1.3rem; margin-top:1rem; display:none; border-radius:0 3px 3px 0; }
-.ai-box.show { display:block; animation:fadeIn 0.35s ease; }
-.ai-label { font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem; }
-.ai-box p { font-size:1rem; line-height:1.8; color:var(--cream); white-space:pre-wrap; }
+.ai-box { background:var(--night4); border-left:2px solid var(--terra); padding:1rem 1.2rem; margin:0 1.2rem; display:none; border-radius:0 10px 10px 0; }
+.ai-box.show { display:block; animation:fadeUp 0.3s ease; }
+.ai-label { font-size:0.6rem; letter-spacing:2px; color:var(--terra); margin-bottom:0.5rem; text-transform:uppercase; }
+.ai-box p { font-size:0.95rem; line-height:1.8; color:var(--ivory); white-space:pre-wrap; }
 
 /* LOADING */
-.loading { display:none; text-align:center; padding:1rem; color:var(--muted); font-size:0.85rem; letter-spacing:0.14em; }
+.loading { display:none; text-align:center; padding:1rem; color:var(--slate); font-size:0.8rem; letter-spacing:1px; }
 .loading.show { display:block; }
-.dot-anim::after { content:''; animation:dots 1.4s infinite; }
+.dot::after { content:''; animation:dots 1.4s infinite; }
 @keyframes dots { 0%,20%{content:'.'} 40%{content:'..'} 60%,100%{content:'...'} }
 
-/* DETECTED */
-.det-item { display:flex; align-items:flex-start; gap:0.8rem; padding:0.9rem 0; border-bottom:0.5px solid var(--border); }
+/* DETECTED LIST */
+.det-item { display:flex; align-items:flex-start; gap:0.8rem; padding:0.9rem 1.2rem; border-bottom:0.5px solid var(--border); }
 .det-item:last-child { border-bottom:none; }
-.chk { width:24px; height:24px; border:1px solid var(--gold); border-radius:3px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; color:var(--gold); font-size:0.85rem; margin-top:2px; }
-.chk.on { background:var(--gold); color:var(--black); }
-.det-name { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--cream); }
-.det-sub { font-size:0.78rem; color:var(--cream2); margin-top:0.15rem; line-height:1.5; }
+.chk { width:22px; height:22px; border:1px solid var(--terra); border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; color:var(--terra); font-size:0.8rem; margin-top:2px; }
+.chk.on { background:var(--terra); color:#fff; }
+.det-name { color:var(--ivory); font-family:'Cormorant Garamond',serif; font-size:1rem; margin-bottom:0.2rem; }
+.det-sub { color:var(--slate); font-size:0.75rem; line-height:1.5; }
 
 /* CHAT */
-.chat-outer { display:flex; flex-direction:column; height:calc(100vh - 230px); min-height:420px; }
-.chat-messages { flex:1; overflow-y:auto; padding:0.5rem 0; -webkit-overflow-scrolling:touch; }
-.chat-msg { display:flex; gap:0.8rem; margin-bottom:1.1rem; animation:fadeIn 0.25s ease; }
-.chat-msg.user { flex-direction:row-reverse; }
-.chat-av { width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:500; }
-.chat-av.ai { background:var(--moss-dim); border:0.5px solid rgba(42,61,42,0.8); color:#A0D0A0; }
-.chat-av.me { background:var(--gold-faint); border:0.5px solid var(--gold-dim); color:var(--gold); }
-.chat-bub { max-width:82%; padding:0.9rem 1.1rem; font-size:1rem; line-height:1.75; }
-.chat-bub.ai { background:var(--black2); border:0.5px solid rgba(42,61,42,0.45); color:var(--cream); border-radius:0 12px 12px 12px; }
-.chat-bub.me { background:rgba(201,162,74,0.12); border:0.5px solid var(--gold-dim); color:var(--cream); border-radius:12px 0 12px 12px; }
-.chat-bottom { border-top:0.5px solid var(--border); padding-top:0.9rem; padding-bottom:env(safe-area-inset-bottom); }
-.chat-sugs { display:flex; flex-wrap:nowrap; gap:0.5rem; margin-bottom:0.9rem; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+.chat-wrap { display:flex; flex-direction:column; height:calc(100vh - 180px); min-height:400px; }
+.chat-msgs { flex:1; overflow-y:auto; padding:1rem 1.2rem; -webkit-overflow-scrolling:touch; }
+.chat-msg { display:flex; gap:0.7rem; margin-bottom:1rem; animation:fadeUp 0.25s ease; }
+.chat-msg.me { flex-direction:row-reverse; }
+.chat-av { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:500; }
+.chat-av.ai { background:var(--terra-dim); border:0.5px solid var(--border2); color:var(--terra); font-family:'Cormorant Garamond',serif; font-size:1rem; }
+.chat-av.me { background:var(--slate-dim); border:0.5px solid var(--border); color:var(--slate); }
+.chat-bub { max-width:80%; padding:0.85rem 1rem; font-size:0.9rem; line-height:1.7; }
+.chat-bub.ai { background:var(--night2); border:0.5px solid var(--border); color:var(--ivory); border-radius:0 12px 12px 12px; }
+.chat-bub.me { background:var(--terra); color:#fff; border-radius:12px 0 12px 12px; }
+.chat-bottom { border-top:0.5px solid var(--border); padding:0.8rem 1.2rem calc(0.8rem + env(safe-area-inset-bottom)); background:var(--night); }
+.chat-typing { display:none; align-items:center; gap:0.7rem; margin-bottom:0.8rem; }
+.chat-typing.show { display:flex; }
+.chat-sugs { display:flex; gap:0.5rem; overflow-x:auto; margin-bottom:0.8rem; scrollbar-width:none; padding-bottom:2px; }
 .chat-sugs::-webkit-scrollbar { display:none; }
-.chat-sug { background:var(--black2); border:0.5px solid var(--border); border-radius:20px; padding:0.5rem 1rem; font-size:0.82rem; color:var(--cream2); cursor:pointer; white-space:nowrap; flex-shrink:0; }
-.chat-sug:active { border-color:var(--gold); color:var(--gold); }
+.chat-sug { background:var(--night2); border:0.5px solid var(--border); border-radius:16px; padding:0.45rem 0.9rem; font-size:0.78rem; color:var(--slate); white-space:nowrap; cursor:pointer; flex-shrink:0; }
+.chat-sug:active { border-color:var(--terra); color:var(--terra); }
 .chat-row { display:flex; gap:0.7rem; align-items:flex-end; }
-.chat-in {
-  flex:1; background:var(--black2); border:1px solid var(--border); border-radius:24px;
-  color:var(--cream); font-family:'Raleway',sans-serif; font-size:1rem;
-  padding:0.85rem 1.2rem; outline:none; transition:border-color 0.3s;
-  resize:none; min-height:50px; max-height:120px; -webkit-appearance:none; margin:0; line-height:1.4;
-}
-.chat-in:focus { border-color:var(--gold); }
-.chat-in::placeholder { color:var(--muted); }
-.chat-btn {
-  background:var(--gold); border:none; color:var(--black);
-  font-size:1.3rem; width:50px; height:50px; border-radius:50%;
-  cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-weight:700;
-}
-.chat-btn:active { background:var(--gold-light); transform:scale(0.93); }
-.chat-typing { display:none; margin-bottom:0.8rem; }
-.chat-typing.show { display:flex; gap:0.8rem; align-items:center; }
+.chat-in { flex:1; background:var(--night2); border:0.5px solid var(--border); border-radius:20px; color:var(--ivory); font-family:'Inter',sans-serif; font-size:0.95rem; padding:0.8rem 1.1rem; outline:none; resize:none; min-height:46px; max-height:120px; -webkit-appearance:none; margin:0; line-height:1.4; transition:border-color 0.2s; }
+.chat-in:focus { border-color:var(--terra); }
+.chat-in::placeholder { color:var(--slate); }
+.chat-send { width:46px; height:46px; border-radius:50%; background:var(--terra); border:none; color:#fff; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.chat-send:active { opacity:0.85; transform:scale(0.95); }
 
 /* DEALS */
-.deal-card { background:var(--black2); border:0.5px solid rgba(42,61,42,0.8); border-radius:3px; padding:1.2rem 1.3rem; margin-bottom:0.9rem; position:relative; }
-.deal-card::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:linear-gradient(90deg,rgba(42,61,42,0.9),transparent); }
-.deal-name { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--gold-light); margin-bottom:0.35rem; }
-.deal-price { font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--gold); }
-.deal-orig { font-size:0.82rem; color:var(--muted); text-decoration:line-through; margin-left:0.4rem; }
-.deal-save { font-size:0.72rem; color:#A0D0A0; margin-left:0.4rem; }
+.deal-card { background:var(--night2); border-radius:14px; padding:1.1rem 1.2rem; margin:0 1.2rem 0.8rem; border:0.5px solid rgba(42,61,42,0.6); position:relative; overflow:hidden; }
+.deal-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,rgba(42,80,42,0.9),transparent); }
+.deal-name { color:var(--ivory); font-family:'Cormorant Garamond',serif; font-size:1.1rem; margin-bottom:0.3rem; }
+.deal-region { color:var(--slate); font-size:0.72rem; margin-bottom:0.7rem; }
+.deal-price-row { display:flex; align-items:baseline; gap:0.5rem; margin-bottom:0.5rem; }
+.deal-price { color:var(--terra); font-family:'Cormorant Garamond',serif; font-size:1.5rem; }
+.deal-orig { color:var(--slate); font-size:0.8rem; text-decoration:line-through; }
+.deal-save { background:rgba(42,80,42,0.4); color:#8DC88D; font-size:0.7rem; padding:2px 7px; border-radius:8px; }
+.deal-reden { color:var(--ivory2); font-size:0.82rem; line-height:1.6; margin-bottom:0.4rem; }
+.deal-shop { color:var(--slate); font-size:0.72rem; }
 
 /* SLIDERS */
 .slider-row { margin-bottom:1rem; }
-input[type=range] { width:100%; accent-color:var(--gold); background:none; border:none; padding:0; margin-bottom:0; height:28px; }
-.slider-labels { display:flex; justify-content:space-between; font-size:0.65rem; color:var(--muted); margin-top:0.2rem; }
+input[type=range] { width:100%; accent-color:var(--terra); background:none; border:none; padding:0; margin-bottom:0; height:28px; }
+.slider-labels { display:flex; justify-content:space-between; font-size:0.62rem; color:var(--slate); margin-top:0.15rem; }
 
-/* EMPTY */
-.empty-state { text-align:center; padding:3rem 1rem; }
-.empty-icon { font-size:2.8rem; margin-bottom:0.9rem; opacity:0.35; }
-.empty-state p { font-size:1rem; color:var(--cream2); line-height:1.9; }
-
-/* MISC */
-.copy-btn { font-size:0.65rem; padding:0.5rem 1rem; margin-top:0.6rem; min-height:40px; }
+/* CARD CONTAINER */
+.card-wrap { margin:0.8rem 1.2rem; background:var(--night2); border-radius:14px; border:0.5px solid var(--border); overflow:hidden; }
+.card-wrap .form-section { padding:1.2rem; }
 </style>
 </head>
 <body>
 
-<!-- SETUP SCREEN -->
-<div id="setup-screen" style="display:none;position:fixed;inset:0;background:var(--black);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;">
-  <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style="width:64px;height:80px;margin-bottom:1rem">
-    <g fill="none" stroke="#C9A24A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
-      <g transform="translate(100,40)">
-        <path d="M40 0 Q100 -10 160 0 Q150 90 100 110 Q50 90 40 0 Z"/>
-        <path d="M55 55 Q100 65 145 55"/>
-        <line x1="100" y1="110" x2="100" y2="190"/>
-        <path d="M70 210 Q100 225 130 210"/>
-      </g>
-    </g>
-  </svg>
-  <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--gold);letter-spacing:0.12em;margin-bottom:0.3rem">Somly</h1>
-  <p style="font-size:0.7rem;letter-spacing:0.28em;color:var(--muted);margin-bottom:2.5rem">SLIMME WIJNEN · BETERE KEUZES</p>
-  <div style="width:100%;max-width:400px;text-align:left">
-    <p style="font-size:1rem;color:var(--cream2);line-height:1.75;margin-bottom:1.5rem;text-align:center">Voer je Anthropic API key in om Somly te activeren. Je key wordt alleen lokaal op dit apparaat bewaard.</p>
-    <label>API Key</label>
-    <input type="password" id="setup-key" placeholder="sk-ant-api03-...">
-    <button class="btn btn-primary" onclick="saveKey()">Activeren</button>
-    <p style="font-size:0.75rem;color:var(--muted);margin-top:1rem;text-align:center;line-height:1.6">Haal je key op via <span style="color:var(--gold)">console.anthropic.com</span> → API Keys</p>
-  </div>
-</div>
-
-<div id="app">
-<header>
-  <div class="logo-wrap">
+<!-- SETUP -->
+<div id="setup">
+  <div class="setup-brand">
     <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#C9A24A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
         <g transform="translate(100,40)">
@@ -247,274 +285,313 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
         </g>
       </g>
     </svg>
+    <h1>Somly</h1>
+    <p>JOUW WIJN · JOUW VERHAAL</p>
   </div>
-  <h1>Somly</h1>
-  <p>Slimme wijnen · Betere keuzes</p>
-</header>
-
-<nav>
-  <button class="active" onclick="showTab('kelder')"><span class="ni">⬡</span>Kelder</button>
-  <button onclick="showTab('toevoegen')"><span class="ni">◎</span>Toevoegen</button>
-  <button onclick="showTab('proeven')"><span class="ni">◇</span>Proeven</button>
-  <button onclick="showTab('sommelier')"><span class="ni">💬</span>Sommelier</button>
-  <button onclick="showTab('advies')"><span class="ni">✦</span>Advies</button>
-  <button onclick="showTab('profiel')"><span class="ni">⚙</span>Profiel</button>
-</nav>
-
-<main>
-
-<!-- KELDER -->
-<div id="tab-kelder" class="tab-panel active">
-  <div id="kelder-stats" class="stats-row" style="display:none"></div>
-  <div class="sec">Mijn Wijnkelder</div>
-  <div id="wine-list"></div>
+  <div class="setup-form">
+    <p style="color:var(--ivory2);font-size:0.9rem;text-align:center;line-height:1.7;margin-bottom:1.5rem">Voer je Anthropic API key in om Somly te activeren. Je key wordt alleen lokaal op dit apparaat bewaard.</p>
+    <label class="field-label">API Key</label>
+    <input type="password" id="setup-key" placeholder="sk-ant-api03-...">
+    <button onclick="saveKey()">Activeren</button>
+    <p class="setup-hint">Haal je key op via <span>console.anthropic.com</span> → API Keys</p>
+  </div>
 </div>
 
-<!-- TOEVOEGEN -->
-<div id="tab-toevoegen" class="tab-panel">
-  <div class="sec">Fles(sen) Toevoegen</div>
-  <input type="file" id="up-add" accept="image/*" style="display:none" onchange="handleAddPhoto(event)">
-  <div class="upload-zone" onclick="document.getElementById('up-add').click()">
-    <div class="icon">📷</div>
-    <p>Foto van één of meerdere flessen</p>
-    <p class="hint">AI herkent alle etiketten automatisch</p>
-  </div>
-  <img id="add-prev" class="img-prev">
-  <div class="loading" id="add-load"><span class="dot-anim">Etiketten herkennen</span></div>
-  <div class="ai-box" id="add-ai"><div class="ai-label">✦ Herkende wijnen</div><p id="add-ai-txt"></p></div>
-  <div id="det-wines" style="display:none">
-    <div class="sec" style="margin-top:1.2rem">Selecteer flessen om toe te voegen</div>
-    <div id="det-list"></div>
-    <div style="margin-top:1rem">
-      <label>Herkomst</label>
-      <select id="add-src">
-        <option value="">— Kies —</option>
-        <option value="cadeau">Cadeau gekregen</option>
-        <option value="gekocht">Zelf gekocht</option>
-        <option value="reis">Meegenomen van reis</option>
-        <option value="anders">Anders</option>
-      </select>
-      <div id="cad-fields" style="display:none">
-        <label>Van wie?</label>
-        <input type="text" id="add-giver" placeholder="Naam gever">
-        <label>Gelegenheid</label>
-        <input type="text" id="add-occ" placeholder="bijv. verjaardag, bedankje...">
-      </div>
-      <div id="koop-fields" style="display:none">
-        <div class="form-row">
-          <div><label>Winkel</label><input type="text" id="add-shop" placeholder="bijv. Vinora..."></div>
-          <div><label>Prijs (€)</label><input type="number" id="add-price" placeholder="0.00"></div>
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="header-top">
+      <div class="brand">
+        <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="#C9A24A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(100,40)">
+              <path d="M40 0 Q100 -10 160 0 Q150 90 100 110 Q50 90 40 0 Z"/>
+              <path d="M55 55 Q100 65 145 55"/>
+              <line x1="100" y1="110" x2="100" y2="190"/>
+              <path d="M70 210 Q100 225 130 210"/>
+            </g>
+          </g>
+        </svg>
+        <div class="brand-text">
+          <div class="brand-name">Somly</div>
+          <div class="brand-tagline">JOUW WIJN · JOUW VERHAAL</div>
         </div>
       </div>
-      <label>Notities</label>
-      <textarea id="add-notes" placeholder="Optioneel..."></textarea>
-      <button class="btn btn-primary" onclick="addSelected()">Toevoegen aan kelder</button>
+      <div class="header-avatar" id="header-avatar">?</div>
     </div>
-  </div>
-</div>
+    <div class="header-greeting" id="header-greeting">Welkom bij Somly</div>
+  </header>
 
-<!-- PROEVEN -->
-<div id="tab-proeven" class="tab-panel">
-  <div class="sec">Proefnotitie · WSET Niveau 2</div>
-  <input type="file" id="up-taste" accept="image/*" style="display:none" onchange="handleTastePhoto(event)">
-  <div class="upload-zone" onclick="document.getElementById('up-taste').click()">
-    <div class="icon">🥂</div>
-    <p>Foto van de fles die je openttrekt</p>
-    <p class="hint">Automatische herkenning</p>
-  </div>
-  <img id="taste-prev" class="img-prev">
-  <div class="loading" id="taste-load"><span class="dot-anim">Wijn herkennen</span></div>
-  <div class="ai-box" id="taste-id" style="margin-bottom:0.9rem"><div class="ai-label">✦ Herkende wijn</div><p id="taste-id-txt"></p></div>
-  <div id="taste-form" style="display:none">
-    <div class="form-row">
-      <div><label>Helderheid</label><select id="t-cl"><option>Helder</option><option>Troebel</option></select></div>
-      <div><label>Kleurintensiteit</label><select id="t-co"><option>Licht</option><option>Medium</option><option>Diep</option></select></div>
+  <main>
+    <!-- HOME / KELDER -->
+    <div id="tab-kelder" class="tab-panel active">
+      <div class="scan-hero" onclick="showTab('scan')">
+        <div class="scan-circle">📷</div>
+        <div class="scan-title">Scan een fles</div>
+        <div class="scan-sub">HERKENNING · TOEVOEGEN · BEOORDELEN</div>
+      </div>
+      <div class="stats" id="kelder-stats" style="display:none"></div>
+      <div id="gift-nudge-area"></div>
+      <div class="sec">Mijn kelder</div>
+      <div id="wine-list"></div>
     </div>
-    <label>Neus — Aroma's</label>
-    <textarea id="t-no" placeholder="bijv. rood fruit, kruiden, aardsheid, vanille..."></textarea>
-    <div class="form-row">
-      <div><label>Zoetheid</label><select id="t-sw"><option>Droog</option><option>Off-dry</option><option>Zoet</option></select></div>
-      <div><label>Zuurgraad</label><select id="t-ac"><option>Laag</option><option>Medium</option><option>Hoog</option></select></div>
-    </div>
-    <div class="form-row">
-      <div><label>Tannines</label><select id="t-ta"><option>N.v.t.</option><option>Laag</option><option>Medium</option><option>Hoog</option></select></div>
-      <div><label>Alcohol</label><select id="t-al"><option>Laag</option><option>Medium</option><option>Hoog</option></select></div>
-    </div>
-    <label>Body</label>
-    <select id="t-bo"><option>Licht</option><option>Medium</option><option>Vol</option></select>
-    <label>Smaak & Afdronk</label>
-    <textarea id="t-fi" placeholder="Beschrijf smaak en afdronk..."></textarea>
-    <label>Persoonlijke indruk</label>
-    <textarea id="t-im" placeholder="Wat vond je ervan?"></textarea>
-    <label>Score (50–100)</label>
-    <input type="number" id="t-sc" min="50" max="100" placeholder="bijv. 88">
-    <button class="btn btn-primary" onclick="saveTasting()">Analyse & Opslaan</button>
-  </div>
-  <div class="loading" id="tast-load"><span class="dot-anim">Analyse maken</span></div>
-  <div class="ai-box" id="taste-ai">
-    <div class="ai-label">✦ Sommelier Analyse</div>
-    <p id="taste-ai-txt"></p>
-    <div id="msg-box" style="display:none;margin-top:1rem">
-      <div class="sec">Bedankbericht</div>
-      <textarea id="msg-txt" style="min-height:110px"></textarea>
-      <button class="btn copy-btn" onclick="copyMsg()">Kopiëren</button>
-    </div>
-  </div>
-</div>
 
-<!-- SOMMELIER CHAT -->
-<div id="tab-sommelier" class="tab-panel">
-  <div class="sec">Persoonlijke Sommelier</div>
-  <div class="chat-outer">
-    <div class="chat-messages" id="chat-msgs">
-      <div class="chat-msg">
-        <div class="chat-av ai">S</div>
-        <div class="chat-bub ai" id="chat-welcome">Hoi! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel en help je graag met advies — welke wijn je vanavond moet opentrekken, wat goed past bij je eten, of hoe lang je een fles nog kunt bewaren.</div>
+    <!-- SCAN / TOEVOEGEN -->
+    <div id="tab-scan" class="tab-panel">
+      <div class="sec">Fles(sen) toevoegen</div>
+      <input type="file" id="up-add" accept="image/*" style="display:none" onchange="handleAdd(event)">
+      <div class="upload-zone" onclick="document.getElementById('up-add').click()">
+        <div class="upload-icon">📷</div>
+        <div class="upload-title">Foto van één of meerdere flessen</div>
+        <div class="upload-sub">AI HERKENT ALLE ETIKETTEN</div>
+      </div>
+      <img id="add-prev" class="img-prev">
+      <div class="loading" id="add-load"><span class="dot">Etiketten herkennen</span></div>
+      <div class="ai-box" id="add-ai"><div class="ai-label">✦ Herkende wijnen</div><p id="add-ai-txt"></p></div>
+      <div id="det-wines" style="display:none">
+        <div class="sec" style="padding-top:1.2rem">Selecteer flessen</div>
+        <div id="det-list"></div>
+        <div class="form-section">
+          <label class="field-label">Herkomst</label>
+          <select id="add-src">
+            <option value="">— Kies —</option>
+            <option value="cadeau">Cadeau gekregen</option>
+            <option value="gekocht">Zelf gekocht</option>
+            <option value="reis">Meegenomen van reis</option>
+            <option value="anders">Anders</option>
+          </select>
+          <div id="cad-fields" style="display:none">
+            <label class="field-label">Van wie?</label>
+            <input type="text" id="add-giver" placeholder="Naam van de gever">
+            <label class="field-label">Gelegenheid</label>
+            <input type="text" id="add-occ" placeholder="bijv. verjaardag, bedankje...">
+          </div>
+          <div id="koop-fields" style="display:none">
+            <div class="form-row">
+              <div><label class="field-label">Winkel</label><input type="text" id="add-shop" placeholder="bijv. Vinora..."></div>
+              <div><label class="field-label">Prijs (€)</label><input type="number" id="add-price" placeholder="0.00"></div>
+            </div>
+          </div>
+          <label class="field-label">Notities</label>
+          <textarea id="add-notes" placeholder="Optioneel..."></textarea>
+          <button class="btn-primary" onclick="addSelected()">Toevoegen aan kelder</button>
+        </div>
       </div>
     </div>
-    <div class="chat-bottom">
-      <div class="chat-typing" id="chat-typing">
-        <div class="chat-av ai">S</div>
-        <div class="chat-bub ai"><span class="dot-anim">Aan het nadenken</span></div>
-      </div>
-      <div class="chat-sugs" id="chat-sugs">
-        <div class="chat-sug" onclick="sendSug(this)">Welke wijn vanavond?</div>
-        <div class="chat-sug" onclick="sendSug(this)">Wat past bij ribeye?</div>
-        <div class="chat-sug" onclick="sendSug(this)">Eerst drinken?</div>
-        <div class="chat-sug" onclick="sendSug(this)">Feestje advies?</div>
-        <div class="chat-sug" onclick="sendSug(this)">Hoe lang bewaren?</div>
-      </div>
-      <div class="chat-row">
-        <textarea class="chat-in" id="chat-in" placeholder="Stel een vraag over wijn..." rows="1" onkeydown="chatKey(event)" oninput="chatResize(this)"></textarea>
-        <button class="chat-btn" onclick="sendChat()">↑</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ADVIES -->
-<div id="tab-advies" class="tab-panel">
-  <div class="sec">Maandelijkse Aanbevelingen</div>
-  <div class="card">
-    <h2>Topdeals voor jou</h2>
-    <p style="font-size:1rem;color:var(--cream2);margin-bottom:1rem">Budget <strong style="color:var(--gold)">€ 100</strong> · Op basis van jouw smaakprofiel</p>
-    <button class="btn btn-primary" onclick="getRecs()">✦ Genereer aanbevelingen</button>
-    <div class="loading" id="rec-load" style="margin-top:1rem"><span class="dot-anim">Topdeals zoeken</span></div>
-  </div>
-  <div id="rec-results"></div>
-</div>
-
-<!-- PROFIEL -->
-<div id="tab-profiel" class="tab-panel">
-  <div class="sec">Mijn Smaakprofiel</div>
-  <div class="card">
-    <label>Jouw naam</label>
-    <input type="text" id="p-name" placeholder="bijv. Niels">
-    <div class="form-row">
-      <div>
-        <label>Favoriete stijl</label>
-        <select id="p-st">
-          <option>Rood — droog, vol</option>
-          <option>Rood — licht, fruitig</option>
-          <option>Wit — droog, fris</option>
-          <option>Wit — vol, gerijpt</option>
-          <option>Rosé</option>
-          <option>Gemengd</option>
-        </select>
+    <!-- PROEVEN -->
+    <div id="tab-proeven" class="tab-panel">
+      <div class="sec">Proefnotitie · WSET Niveau 2</div>
+      <input type="file" id="up-taste" accept="image/*" style="display:none" onchange="handleTaste(event)">
+      <div class="upload-zone" onclick="document.getElementById('up-taste').click()">
+        <div class="upload-icon">🥂</div>
+        <div class="upload-title">Foto van de fles die je openttrekt</div>
+        <div class="upload-sub">AUTOMATISCHE HERKENNING</div>
       </div>
-      <div>
-        <label>Budget per fles</label>
-        <select id="p-bu">
-          <option>€ 10–15</option>
-          <option>€ 15–25</option>
-          <option selected>€ 25–40</option>
-          <option>€ 40–60</option>
-          <option>€ 60+</option>
-        </select>
+      <img id="taste-prev" class="img-prev">
+      <div class="loading" id="taste-load"><span class="dot">Wijn herkennen</span></div>
+      <div class="ai-box" id="taste-id" style="margin-bottom:0.8rem"><div class="ai-label">✦ Herkende wijn</div><p id="taste-id-txt"></p></div>
+      <div id="taste-form" style="display:none">
+        <div class="form-section">
+          <div class="form-row">
+            <div><label class="field-label">Helderheid</label><select id="t-cl"><option>Helder</option><option>Troebel</option></select></div>
+            <div><label class="field-label">Kleurintensiteit</label><select id="t-co"><option>Licht</option><option>Medium</option><option>Diep</option></select></div>
+          </div>
+          <label class="field-label">Neus — Aroma's</label>
+          <textarea id="t-no" placeholder="bijv. rood fruit, kruiden, vanille..."></textarea>
+          <div class="form-row">
+            <div><label class="field-label">Zoetheid</label><select id="t-sw"><option>Droog</option><option>Off-dry</option><option>Zoet</option></select></div>
+            <div><label class="field-label">Zuurgraad</label><select id="t-ac"><option>Laag</option><option>Medium</option><option>Hoog</option></select></div>
+          </div>
+          <div class="form-row">
+            <div><label class="field-label">Tannines</label><select id="t-ta"><option>N.v.t.</option><option>Laag</option><option>Medium</option><option>Hoog</option></select></div>
+            <div><label class="field-label">Alcohol</label><select id="t-al"><option>Laag</option><option>Medium</option><option>Hoog</option></select></div>
+          </div>
+          <label class="field-label">Body</label>
+          <select id="t-bo"><option>Licht</option><option>Medium</option><option>Vol</option></select>
+          <label class="field-label">Smaak & Afdronk</label>
+          <textarea id="t-fi" placeholder="Beschrijf smaak en afdronk..."></textarea>
+          <label class="field-label">Persoonlijke indruk</label>
+          <textarea id="t-im" placeholder="Wat vond je ervan?"></textarea>
+          <label class="field-label">Score (50–100)</label>
+          <input type="number" id="t-sc" min="50" max="100" placeholder="bijv. 88">
+          <button class="btn-primary" onclick="saveTasting()">Analyse & Opslaan</button>
+        </div>
+      </div>
+      <div class="loading" id="tast-load"><span class="dot">Analyse maken</span></div>
+      <div class="ai-box" id="taste-ai">
+        <div class="ai-label">✦ Sommelier Analyse</div>
+        <p id="taste-ai-txt"></p>
+        <div id="msg-box" style="display:none;margin-top:1rem">
+          <div style="font-size:0.6rem;letter-spacing:2px;color:var(--terra);margin-bottom:0.5rem;text-transform:uppercase">Bedankbericht</div>
+          <textarea id="msg-txt" style="min-height:110px"></textarea>
+          <button class="btn-outline" onclick="copyMsg()" style="margin-top:0.5rem">Kopiëren</button>
+        </div>
       </div>
     </div>
-    <div class="slider-row">
-      <label>Voorkeur eik/hout</label>
-      <input type="range" min="0" max="4" value="2" id="p-oa">
-      <div class="slider-labels"><span>Geen hout</span><span>Veel hout</span></div>
-    </div>
-    <div class="slider-row">
-      <label>Tannines</label>
-      <input type="range" min="0" max="4" value="2" id="p-ta">
-      <div class="slider-labels"><span>Zacht</span><span>Stevig</span></div>
-    </div>
-    <div class="slider-row">
-      <label>Zuurgraad</label>
-      <input type="range" min="0" max="4" value="2" id="p-ac">
-      <div class="slider-labels"><span>Laag</span><span>Levendig</span></div>
-    </div>
-    <label>Favoriete regio's</label>
-    <input type="text" id="p-re" placeholder="bijv. Bordeaux, Bourgogne, Toscane...">
-    <label>Te vermijden</label>
-    <input type="text" id="p-av" placeholder="bijv. Merlot, Gewürztraminer...">
-    <label>Gelegenheid</label>
-    <select id="p-oc">
-      <option>Doordeweeks bij het eten</option>
-      <option>Weekenddinners</option>
-      <option>Gasten ontvangen</option>
-      <option>Speciale gelegenheden</option>
-      <option>Alles</option>
-    </select>
-    <label>Extra info voor de sommelier</label>
-    <textarea id="p-ex" placeholder="bijv. ik bewaar sommige flessen 5+ jaar, ik hou van rijpe warme stijlen..."></textarea>
-    <button class="btn btn-primary" onclick="savePrefs()">Profiel Opslaan</button>
-    <div class="ai-box" id="pref-ok" style="margin-top:0.9rem">
-      <div class="ai-label">✦ Opgeslagen</div>
-      <p id="pref-ok-txt"></p>
-    </div>
-    <div style="margin-top:1.2rem;padding-top:1rem;border-top:0.5px solid var(--border)">
-      <button class="btn btn-full" onclick="resetKey()" style="color:var(--muted);border-color:var(--muted);font-size:0.7rem">API Key wijzigen</button>
-    </div>
-  </div>
-</div>
 
-</main>
-</div><!-- end app -->
+    <!-- SOMMELIER CHAT -->
+    <div id="tab-sommelier" class="tab-panel">
+      <div class="chat-wrap">
+        <div class="chat-msgs" id="chat-msgs">
+          <div class="chat-msg">
+            <div class="chat-av ai">S</div>
+            <div class="chat-bub ai" id="chat-welcome">Hoi! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel en help je met advies — welke wijn je vanavond moet opentrekken, wat past bij je eten, of wanneer je een fles het best drinkt.</div>
+          </div>
+        </div>
+        <div class="chat-bottom">
+          <div class="chat-typing" id="chat-typing">
+            <div class="chat-av ai">S</div>
+            <div class="chat-bub ai"><span class="dot">Aan het nadenken</span></div>
+          </div>
+          <div class="chat-sugs" id="chat-sugs">
+            <div class="chat-sug" onclick="sendSug(this)">Welke wijn vanavond?</div>
+            <div class="chat-sug" onclick="sendSug(this)">Wat past bij ribeye?</div>
+            <div class="chat-sug" onclick="sendSug(this)">Eerst drinken?</div>
+            <div class="chat-sug" onclick="sendSug(this)">Hoe lang bewaren?</div>
+            <div class="chat-sug" onclick="sendSug(this)">Feestje advies?</div>
+          </div>
+          <div class="chat-row">
+            <textarea class="chat-in" id="chat-in" placeholder="Stel een vraag over wijn..." rows="1" onkeydown="chatKey(event)" oninput="chatResize(this)"></textarea>
+            <button class="chat-send" onclick="sendChat()">↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADVIES -->
+    <div id="tab-advies" class="tab-panel">
+      <div class="sec">Maandelijkse aanbevelingen</div>
+      <div style="padding:0 1.2rem 1rem">
+        <p style="color:var(--ivory2);font-size:0.9rem;line-height:1.7;margin-bottom:1rem">Budget <strong style="color:var(--terra)">€ 100</strong> · Topdeals op basis van jouw smaakprofiel</p>
+        <button class="btn-primary" onclick="getRecs()">✦ Genereer aanbevelingen</button>
+      </div>
+      <div class="loading" id="rec-load"><span class="dot">Topdeals zoeken</span></div>
+      <div id="rec-results"></div>
+    </div>
+
+    <!-- PROFIEL -->
+    <div id="tab-profiel" class="tab-panel">
+      <div class="sec">Mijn profiel</div>
+      <div class="card-wrap">
+        <div class="form-section">
+          <label class="field-label">Jouw naam</label>
+          <input type="text" id="p-name" placeholder="bijv. Niels">
+          <div class="form-row">
+            <div><label class="field-label">Stijl</label>
+              <select id="p-st">
+                <option>Rood — droog, vol</option>
+                <option>Rood — licht, fruitig</option>
+                <option>Wit — droog, fris</option>
+                <option>Wit — vol, gerijpt</option>
+                <option>Rosé</option>
+                <option>Gemengd</option>
+              </select>
+            </div>
+            <div><label class="field-label">Budget/fles</label>
+              <select id="p-bu">
+                <option>€ 10–15</option>
+                <option>€ 15–25</option>
+                <option selected>€ 25–40</option>
+                <option>€ 40–60</option>
+                <option>€ 60+</option>
+              </select>
+            </div>
+          </div>
+          <div class="slider-row">
+            <label class="field-label">Eik/hout</label>
+            <input type="range" min="0" max="4" value="2" id="p-oa">
+            <div class="slider-labels"><span>Geen hout</span><span>Veel hout</span></div>
+          </div>
+          <div class="slider-row">
+            <label class="field-label">Tannines</label>
+            <input type="range" min="0" max="4" value="2" id="p-ta">
+            <div class="slider-labels"><span>Zacht</span><span>Stevig</span></div>
+          </div>
+          <div class="slider-row">
+            <label class="field-label">Zuurgraad</label>
+            <input type="range" min="0" max="4" value="2" id="p-ac">
+            <div class="slider-labels"><span>Laag</span><span>Levendig</span></div>
+          </div>
+          <label class="field-label">Favoriete regio's</label>
+          <input type="text" id="p-re" placeholder="bijv. Bordeaux, Bourgogne, Toscane...">
+          <label class="field-label">Te vermijden</label>
+          <input type="text" id="p-av" placeholder="bijv. Merlot, Gewürztraminer...">
+          <label class="field-label">Gelegenheid</label>
+          <select id="p-oc">
+            <option>Doordeweeks bij het eten</option>
+            <option>Weekenddinners</option>
+            <option>Gasten ontvangen</option>
+            <option>Speciale gelegenheden</option>
+            <option>Alles</option>
+          </select>
+          <label class="field-label">Extra info voor de sommelier</label>
+          <textarea id="p-ex" placeholder="bijv. ik bewaar sommige flessen 5+ jaar, ik hou van rijpe warme stijlen..."></textarea>
+          <button class="btn-primary" onclick="savePrefs()">Profiel opslaan</button>
+          <div class="ai-box" id="pref-ok" style="margin:1rem 0 0">
+            <div class="ai-label">✦ Opgeslagen</div>
+            <p id="pref-ok-txt"></p>
+          </div>
+          <button class="btn-outline" onclick="resetKey()" style="margin-top:1rem;font-size:0.75rem;color:var(--slate);border-color:var(--border)">API Key wijzigen</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav">
+    <button class="bnav-btn active" onclick="showTab('kelder')"><span class="bnav-icon">⬡</span><span class="bnav-label">Kelder</span></button>
+    <button class="bnav-btn" onclick="showTab('proeven')"><span class="bnav-icon">◇</span><span class="bnav-label">Proeven</span></button>
+    <button class="bnav-scan" onclick="showTab('scan')">📷</button>
+    <button class="bnav-btn" onclick="showTab('sommelier')"><span class="bnav-icon">💬</span><span class="bnav-label">Sommelier</span></button>
+    <button class="bnav-btn" onclick="showTab('profiel')"><span class="bnav-icon">⚙</span><span class="bnav-label">Profiel</span></button>
+  </nav>
+</div>
 
 <script>
 const API = 'https://api.anthropic.com/v1/messages';
-let detected = [];
-let chatHistory = [];
-let chatInited = false;
+let detected = [], chatHistory = [], chatInited = false;
 
-// STORAGE
 function getData(){ try{return JSON.parse(localStorage.getItem('somly')||'{}')}catch{return{}} }
 function setData(d){ try{localStorage.setItem('somly',JSON.stringify(d))}catch{} }
 function getKey(){ return localStorage.getItem('somly_key')||''; }
 function setKey(k){ localStorage.setItem('somly_key',k); }
 
-// SETUP
 function checkSetup(){
-  const show = !getKey();
-  document.getElementById('setup-screen').style.display = show ? 'flex' : 'none';
-  document.getElementById('app').style.display = show ? 'none' : 'block';
-}
-function saveKey(){
-  const k = document.getElementById('setup-key').value.trim();
-  if(!k.startsWith('sk-ant-')){ alert('Ongeldige key — moet beginnen met sk-ant-'); return; }
-  setKey(k);
-  checkSetup();
-  renderKelder();
-}
-function resetKey(){
-  if(confirm('API key verwijderen?')){ localStorage.removeItem('somly_key'); checkSetup(); }
+  const ok=!!getKey();
+  document.getElementById('setup').style.display=ok?'none':'flex';
+  document.getElementById('app').style.display=ok?'block':'none';
+  if(ok) initApp();
 }
 
-// TABS
+function saveKey(){
+  const k=document.getElementById('setup-key').value.trim();
+  if(!k.startsWith('sk-ant-')){ alert('Ongeldige key — moet beginnen met sk-ant-'); return; }
+  setKey(k); checkSetup();
+}
+function resetKey(){ if(confirm('API key verwijderen?')){ localStorage.removeItem('somly_key'); checkSetup(); } }
+
+function initApp(){
+  const d=getData(); const name=d.preferences?.name||'';
+  const av=document.getElementById('header-avatar');
+  const gr=document.getElementById('header-greeting');
+  const h=new Date().getHours();
+  const dag=h<12?'Goedemorgen':h<18?'Goedemiddag':'Goedenavond';
+  av.textContent=name?name[0].toUpperCase():'?';
+  gr.textContent=name?`${dag}, ${name}`:`${dag}`;
+  renderKelder();
+}
+
 function showTab(n){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+n).classList.add('active');
-  const m={kelder:0,toevoegen:1,proeven:2,sommelier:3,advies:4,profiel:5};
-  document.querySelectorAll('nav button')[m[n]].classList.add('active');
+  const map={kelder:0,proeven:1,scan:-1,sommelier:2,profiel:3};
+  if(map[n]>=0) document.querySelectorAll('.bnav-btn')[map[n]].classList.add('active');
   if(n==='kelder') renderKelder();
   if(n==='profiel') loadPrefs();
   if(n==='sommelier') initChat();
+  window.scrollTo(0,0);
 }
 
 // KELDER
@@ -522,60 +599,91 @@ function renderKelder(){
   const d=getData(); const wines=d.wines||[];
   const list=document.getElementById('wine-list');
   const stats=document.getElementById('kelder-stats');
+  const nudge=document.getElementById('gift-nudge-area');
+
+  // Gift nudge — vind onbedankte cadeaus
+  const unbedankt=wines.filter(w=>w.giver&&!w.bedankt);
+  if(unbedankt.length){
+    const w=unbedankt[0];
+    nudge.innerHTML=`<div class="gift-nudge">
+      <div class="gift-nudge-icon">🎁</div>
+      <div class="gift-nudge-info">
+        <div class="gift-nudge-title">Bedank ${w.giver} nog!</div>
+        <div class="gift-nudge-sub">Voor de ${w.name||'wijn'}${w.year?' '+w.year:''}</div>
+      </div>
+      <button class="gift-nudge-btn" onclick="sendThankYou(${wines.indexOf(w)})">STUUR</button>
+    </div>`;
+  } else { nudge.innerHTML=''; }
+
   if(!wines.length){
-    list.innerHTML=`<div class="empty-state"><div class="empty-icon">🍷</div><p>Je kelder is nog leeg.<br>Voeg je eerste fles toe via Toevoegen.</p></div>`;
+    list.innerHTML=`<div class="empty"><div class="empty-icon">🍷</div><p>Je kelder is nog leeg.<br>Tap op 📷 om je eerste fles toe te voegen.</p></div>`;
     stats.style.display='none'; return;
   }
+
   const tot=wines.reduce((s,w)=>s+(parseInt(w.bottles)||1),0);
   const sc=wines.filter(w=>w.score).map(w=>parseInt(w.score));
   const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):'—';
   const val=wines.reduce((s,w)=>s+((parseFloat(w.price)||0)*(parseInt(w.bottles)||1)),0);
   stats.style.display='grid';
   stats.innerHTML=`
-    <div class="stat-box"><div class="stat-num">${tot}</div><div class="stat-lbl">FLESSEN</div></div>
-    <div class="stat-box"><div class="stat-num">${avg}</div><div class="stat-lbl">GEM. SCORE</div></div>
-    <div class="stat-box"><div class="stat-num">${val>0?'€'+Math.round(val):'—'}</div><div class="stat-lbl">WAARDE</div></div>`;
+    <div class="stat"><div class="stat-n">${tot}</div><div class="stat-l">FLESSEN</div></div>
+    <div class="stat"><div class="stat-n">${avg}</div><div class="stat-l">GEM. SCORE</div></div>
+    <div class="stat"><div class="stat-n">${val>0?'€'+Math.round(val):'—'}</div><div class="stat-l">WAARDE</div></div>`;
+
   list.innerHTML=wines.map((w,i)=>{
-    const tc=w.type==='wit'?'white':w.type==='rosé'?'rose':w.type==='schuim'?'moss':'red';
-    const em=w.type==='wit'?'🥂':w.type==='rosé'?'🌹':w.type==='schuim'?'✦':'🍷';
-    const bc=w.type==='wit'?'badge-white':w.type==='rosé'?'badge-rose':w.type==='schuim'?'badge-moss':'badge-red';
-    return `<div class="wine-item">
-      <div class="wine-dot ${tc}">${em}</div>
+    const t=w.type==='wit'?'white':w.type==='rosé'?'rose':w.type==='schuim'?'sparkling':'red';
+    return `<div class="wine-card">
+      <div class="wine-card-bar ${t}"></div>
+      <div class="wine-bottle ${t}"></div>
       <div class="wine-info">
         <div class="wine-name">${w.name||'Onbekende wijn'}</div>
-        <div class="wine-meta">${w.region||''}${w.year?' · '+w.year:''}${(parseInt(w.bottles)||1)>1?' · '+w.bottles+' fl.':''}</div>
-        <div style="margin-top:0.3rem"><span class="badge ${bc}">${w.type||'rood'}</span>${w.giver?`<span style="font-size:0.72rem;color:var(--cream2);margin-left:0.5rem">van ${w.giver}</span>`:''}</div>
+        <div class="wine-region">${w.region||''}${w.year?' · '+w.year:''}</div>
+        <div class="wine-tags">
+          <span class="tag">${w.type||'rood'}</span>
+          ${(parseInt(w.bottles)||1)>1?`<span class="tag">${w.bottles} fl.</span>`:''}
+          ${w.giver?`<span class="tag gift">🎁 van ${w.giver}</span>`:''}
+        </div>
       </div>
       <div class="wine-right">
         <div class="wine-score">${w.score||'—'}</div>
-        <button class="del-btn" onclick="delWine(${i})">✕</button>
+        ${w.score?`<div class="wine-score-sub">/100</div>`:''}
+        <button class="wine-del" onclick="delWine(${i})">✕</button>
       </div>
     </div>`;
   }).join('');
 }
+
 function delWine(i){ const d=getData(); d.wines.splice(i,1); setData(d); renderKelder(); }
 
-// CLAUDE API
-async function claude(prompt, system, b64, mt){
+async function sendThankYou(i){
+  const d=getData(); const w=d.wines[i];
+  showTab('sommelier');
+  setTimeout(()=>{
+    document.getElementById('chat-in').value=`Schrijf een bedankberichtje voor ${w.giver} voor de ${w.name||'wijn'}${w.year?' '+w.year:''}`;
+    sendChat();
+  }, 400);
+  d.wines[i].bedankt=true; setData(d);
+}
+
+// API
+async function claude(prompt,system,b64,mt){
   const content=[];
   if(b64) content.push({type:'image',source:{type:'base64',media_type:mt||'image/jpeg',data:b64}});
   content.push({type:'text',text:prompt});
-  const r=await fetch(API,{
-    method:'POST',mode:'cors',
+  const r=await fetch(API,{method:'POST',mode:'cors',
     headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system:system||'Je bent een expert wijn sommelier. Antwoord altijd in het Nederlands.',messages:[{role:'user',content}]})
-  });
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system:system||'Je bent een expert wijn sommelier. Antwoord altijd in het Nederlands.',messages:[{role:'user',content}]})});
   const j=await r.json();
   if(!r.ok) throw new Error(`API fout ${r.status}: ${j.error?.message||JSON.stringify(j)}`);
   return j.content?.[0]?.text||'';
 }
 
-function toB64(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>{ const p=e.target.result.split(','); const mt=p[0].match(/:(.*?);/)?.[1]||'image/jpeg'; const safe=(mt==='image/heic'||mt==='image/heif')?'image/jpeg':mt; res({b64:p[1],mt:safe}); }; r.onerror=()=>rej(new Error('Leesfout')); r.readAsDataURL(f); }); }
+function toB64(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>{ const p=e.target.result.split(','); const mt=p[0].match(/:(.*?);/)?.[1]||'image/jpeg'; res({b64:p[1],mt:(mt==='image/heic'||mt==='image/heif')?'image/jpeg':mt}); }; r.onerror=()=>rej(new Error('Leesfout')); r.readAsDataURL(f); }); }
 
 function parseWines(text){
   const clean=text.replace(/```json|```/gi,'').trim();
-  const match=clean.match(/\[[\s\S]*\]/);
-  if(match){ try{ const r=JSON.parse(match[0]); if(Array.isArray(r)&&r.length) return r; }catch{} }
+  const m=clean.match(/\[[\s\S]*\]/);
+  if(m){ try{ const r=JSON.parse(m[0]); if(Array.isArray(r)&&r.length) return r; }catch{} }
   try{ const r=JSON.parse(clean); if(Array.isArray(r)) return r; if(r?.name) return [r]; }catch{}
   return null;
 }
@@ -586,7 +694,7 @@ document.getElementById('add-src').addEventListener('change',function(){
   document.getElementById('koop-fields').style.display=this.value==='gekocht'?'block':'none';
 });
 
-async function handleAddPhoto(e){
+async function handleAdd(e){
   const f=e.target.files[0]; if(!f) return;
   const fr=new FileReader(); fr.onload=x=>{const p=document.getElementById('add-prev');p.src=x.target.result;p.style.display='block';}; fr.readAsDataURL(f);
   document.getElementById('add-load').classList.add('show');
@@ -596,14 +704,13 @@ async function handleAddPhoto(e){
     const {b64,mt}=await toB64(f);
     const res=await claude(
       'Analyseer dit beeld. Identificeer ALLE zichtbare wijnflessen. Geef ALLEEN een JSON array:\n[{"name":"volledige naam","year":"jaar of null","region":"regio","type":"rood of wit of rosé of schuim","grape":"druivenras","style":"1 zin omschrijving"}]',
-      'Je bent een expert wijn sommelier die etiketten herkent. Geef ALTIJD en ALLEEN geldige JSON terug.',
-      b64,mt);
+      'Je bent een expert wijn sommelier die etiketten herkent. Geef ALTIJD en ALLEEN geldige JSON terug.',b64,mt);
     const wines=parseWines(res);
     if(!wines){
-      document.getElementById('add-ai-txt').textContent='Kon niet herkennen — vul handmatig in. ('+res.substring(0,100)+')';
+      document.getElementById('add-ai-txt').textContent='Kon niet herkennen — vul handmatig in.';
       document.getElementById('add-ai').classList.add('show');
       detected=[{name:'',year:null,region:'',type:'rood',grape:'',style:''}];
-      document.getElementById('det-list').innerHTML=`<div class="det-item"><div class="chk on" id="chk0" onclick="tog(0)">✓</div><input type="text" placeholder="Wijnnaam" style="flex:1" id="man0"></div>`;
+      document.getElementById('det-list').innerHTML=`<div class="det-item"><div class="chk on" id="chk0" onclick="tog(0)">✓</div><div style="flex:1"><input type="text" placeholder="Wijnnaam" style="background:transparent;border:none;border-bottom:0.5px solid var(--border);color:var(--ivory);font-size:0.95rem;width:100%;padding:0.3rem 0;outline:none" id="man0"></div></div>`;
       document.getElementById('det-wines').style.display='block';
       document.getElementById('add-load').classList.remove('show');
       return;
@@ -644,8 +751,8 @@ function addSelected(){
   detected.forEach((w,i)=>{
     const c=document.getElementById('chk'+i);
     if(c&&c.classList.contains('on')){
-      const manName=document.getElementById('man'+i)?.value;
-      d.wines.push({...w,name:manName||w.name,source:src,giver,occasion:occ,shop,price,notes,bottles:1,added:new Date().toISOString()});
+      const man=document.getElementById('man'+i)?.value;
+      d.wines.push({...w,name:man||w.name,source:src,giver,occasion:occ,shop,price,notes,bottles:1,bedankt:false,added:new Date().toISOString()});
       added++;
     }
   });
@@ -660,7 +767,7 @@ function addSelected(){
 }
 
 // PROEVEN
-async function handleTastePhoto(e){
+async function handleTaste(e){
   const f=e.target.files[0]; if(!f) return;
   const fr=new FileReader(); fr.onload=x=>{const p=document.getElementById('taste-prev');p.src=x.target.result;p.style.display='block';}; fr.readAsDataURL(f);
   document.getElementById('taste-load').classList.add('show');
@@ -682,12 +789,12 @@ async function handleTastePhoto(e){
 
 async function saveTasting(){
   const info=document.getElementById('taste-id-txt').textContent;
-  const d=getData(); const wines=d.wines||[];
-  const giver=wines.find(w=>info.toLowerCase().includes((w.name||'').toLowerCase().split(' ')[0]||'xxx'))?.giver||'';
+  const d=getData();
+  const giver=(d.wines||[]).find(w=>info.toLowerCase().includes((w.name||'').toLowerCase().split(' ')[0]||'xxx'))?.giver||'';
   const n={cl:document.getElementById('t-cl').value,co:document.getElementById('t-co').value,no:document.getElementById('t-no').value,sw:document.getElementById('t-sw').value,ac:document.getElementById('t-ac').value,ta:document.getElementById('t-ta').value,al:document.getElementById('t-al').value,bo:document.getElementById('t-bo').value,fi:document.getElementById('t-fi').value,im:document.getElementById('t-im').value,sc:document.getElementById('t-sc').value};
   document.getElementById('tast-load').classList.add('show');
   document.getElementById('taste-ai').classList.remove('show');
-  const prompt=`Wijn: ${info}\nWSET notitie: ${JSON.stringify(n)}\n${giver?`Cadeau van: ${giver}`:''}\n\n1. Schrijf een professionele WSET niveau 2 proefnotitie samenvatting (3-4 zinnen).\n${giver?'\n2. Schrijf een warm persoonlijk bedankbericht voor '+giver+'. Begin met "---BERICHT---" op een nieuwe regel.':'2. Geef 2 passende spijscombinaties.'}`;
+  const prompt=`Wijn: ${info}\nWSET notitie: ${JSON.stringify(n)}\n${giver?`Cadeau van: ${giver}`:''}\n\n1. Schrijf een WSET niveau 2 proefnotitie (3-4 zinnen).\n${giver?'\n2. Schrijf een warm persoonlijk bedankbericht voor '+giver+'. Begin het bericht op een nieuwe regel met exact "---BERICHT---"':'2. Geef 2 passende spijscombinaties.'}`;
   try{
     const res=await claude(prompt);
     document.getElementById('tast-load').classList.remove('show');
@@ -697,9 +804,7 @@ async function saveTasting(){
       document.getElementById('taste-ai-txt').textContent=pts[0].trim();
       document.getElementById('msg-txt').value=pts[1].trim();
       document.getElementById('msg-box').style.display='block';
-    } else {
-      document.getElementById('taste-ai-txt').textContent=res;
-    }
+    } else { document.getElementById('taste-ai-txt').textContent=res; }
     if(!d.tastings) d.tastings=[];
     d.tastings.push({wine:info,notitie:n,date:new Date().toISOString()});
     setData(d);
@@ -709,27 +814,25 @@ async function saveTasting(){
     document.getElementById('taste-ai').classList.add('show');
   }
 }
-
-function copyMsg(){ navigator.clipboard.writeText(document.getElementById('msg-txt').value).then(()=>{ const b=document.querySelector('.copy-btn'); b.textContent='✓ Gekopieerd'; setTimeout(()=>b.textContent='Kopiëren',2000); }); }
+function copyMsg(){ navigator.clipboard.writeText(document.getElementById('msg-txt').value).then(()=>{ const b=document.querySelector('.btn-outline'); b.textContent='✓ Gekopieerd!'; setTimeout(()=>b.textContent='Kopiëren',2000); }); }
 
 // CHAT
 function initChat(){
-  if(chatInited) return;
-  chatInited=true;
+  if(chatInited) return; chatInited=true;
   const name=getData().preferences?.name||'';
-  if(name) document.getElementById('chat-welcome').textContent=`Hoi ${name}! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel. Stel me gerust een vraag — over welke wijn je vanavond moet opentrekken, wat goed past bij je eten, of hoe lang je een fles nog kunt bewaren.`;
+  if(name) document.getElementById('chat-welcome').textContent=`Hoi ${name}! Ik ben je persoonlijke sommelier. Ik ken je wijnkelder en smaakprofiel en help je met advies — welke wijn je vanavond moet opentrekken, wat past bij je eten, of wanneer je een fles het best drinkt.`;
 }
 
 function getChatCtx(){
   const d=getData(); const wines=d.wines||[]; const p=d.preferences||{};
-  const kelder=wines.length?wines.map(w=>`- ${w.name||'?'}${w.year?' '+w.year:''} (${w.type||'rood'}, ${w.region||'?'})${w.score?', score '+w.score:''}`).join('\n'):'Kelder is leeg.';
+  const kelder=wines.length?wines.map(w=>`- ${w.name||'?'}${w.year?' '+w.year:''} (${w.type||'rood'}, ${w.region||'?'})${w.score?', score '+w.score:''}${w.giver?', cadeau van '+w.giver:''}`).join('\n'):'Kelder is leeg.';
   return `Je bent een persoonlijke wijn sommelier die altijd informeel communiceert (je/jij). Je kent de kelder en voorkeuren van de gebruiker volledig.\n\nKELDER:\n${kelder}\n\nSMAKEN:\n- Stijl: ${p.style||'niet ingesteld'}\n- Regio's: ${p.regions||'niet ingesteld'}\n- Hout: ${p.oak||2}/4, Tannines: ${p.tannin||2}/4\n- Extra: ${p.extra||''}\n\nGeef concrete, persoonlijke adviezen. Wees warm, enthousiast en to the point. Antwoord in het Nederlands.`;
 }
 
 async function sendChat(){
   const input=document.getElementById('chat-in');
   const msg=input.value.trim(); if(!msg) return;
-  input.value=''; input.style.height='50px';
+  input.value=''; input.style.height='46px';
   document.getElementById('chat-sugs').style.display='none';
   addMsg(msg,'me');
   chatHistory.push({role:'user',content:msg});
@@ -743,21 +846,18 @@ async function sendChat(){
     const reply=j.content?.[0]?.text||'';
     chatHistory.push({role:'assistant',content:reply});
     document.getElementById('chat-typing').classList.remove('show');
-    addMsg(reply,'ai');
-    scrollChat();
+    addMsg(reply,'ai'); scrollChat();
   }catch(err){
     document.getElementById('chat-typing').classList.remove('show');
     addMsg('Sorry, er ging iets mis: '+err.message,'ai');
   }
 }
-
 function addMsg(text,type){
   const el=document.createElement('div');
-  el.className='chat-msg'+(type==='me'?' user':'');
-  el.innerHTML=`<div class="chat-av ${type}">${type==='ai'?'S':'jij'}</div><div class="chat-bub ${type}">${text.replace(/\n/g,'<br>')}</div>`;
+  el.className='chat-msg'+(type==='me'?' me':'');
+  el.innerHTML=`<div class="chat-av ${type==='ai'?'ai':'me'}">${type==='ai'?'S':'jij'}</div><div class="chat-bub ${type==='ai'?'ai':'me'}">${text.replace(/\n/g,'<br>')}</div>`;
   document.getElementById('chat-msgs').appendChild(el);
 }
-
 function scrollChat(){ const el=document.getElementById('chat-msgs'); el.scrollTop=el.scrollHeight; }
 function sendSug(el){ document.getElementById('chat-in').value=el.textContent; sendChat(); }
 function chatKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChat(); } }
@@ -774,60 +874,39 @@ async function getRecs(){
     document.getElementById('rec-load').classList.remove('show');
     let wines=[];
     try{ wines=JSON.parse(res.replace(/```json|```/gi,'').trim()); }catch{ wines=[]; }
-    if(!wines.length){ document.getElementById('rec-results').innerHTML=`<div class="ai-box show"><div class="ai-label">✦ Aanbevelingen</div><p>${res}</p></div>`; return; }
+    if(!wines.length){ document.getElementById('rec-results').innerHTML=`<div class="ai-box show" style="margin:0 1.2rem"><div class="ai-label">✦ Aanbevelingen</div><p>${res}</p></div>`; return; }
     document.getElementById('rec-results').innerHTML=wines.map(w=>`
       <div class="deal-card">
-        <div style="margin-bottom:0.4rem"><span class="badge badge-moss">${w.jaar||''}</span> <span style="font-size:0.72rem;color:var(--cream2);margin-left:0.4rem">${w.regio||''}</span></div>
+        <div style="display:flex;gap:6px;margin-bottom:6px"><span style="background:rgba(42,61,42,0.4);color:#8DC88D;font-size:0.65rem;padding:2px 7px;border-radius:8px">${w.jaar||''}</span><span style="color:var(--slate);font-size:0.7rem;align-self:center">${w.regio||''}</span></div>
         <div class="deal-name">${w.naam}</div>
-        <div style="margin:0.4rem 0"><span class="deal-price">€${w.deal}</span><span class="deal-orig">€${w.normaal}</span><span class="deal-save">−${w.besparing}</span></div>
-        <p style="font-size:0.92rem;color:var(--cream);line-height:1.65;margin-bottom:0.4rem">${w.reden}</p>
-        <p style="font-size:0.75rem;color:var(--cream2)">📍 ${w.winkel}</p>
+        <div class="deal-price-row"><span class="deal-price">€${w.deal}</span><span class="deal-orig">€${w.normaal}</span><span class="deal-save">−${w.besparing}</span></div>
+        <div class="deal-reden">${w.reden}</div>
+        <div class="deal-shop">📍 ${w.winkel}</div>
       </div>`).join('');
   }catch(err){
     document.getElementById('rec-load').classList.remove('show');
-    document.getElementById('rec-results').innerHTML=`<p style="color:var(--muted);font-size:0.9rem">Fout: ${err.message}</p>`;
+    document.getElementById('rec-results').innerHTML=`<p style="color:var(--slate);padding:1rem 1.2rem;font-size:0.9rem">Fout: ${err.message}</p>`;
   }
 }
 
 // PROFIEL
 function loadPrefs(){
   const p=getData().preferences||{};
-  if(p.name) document.getElementById('p-name').value=p.name;
-  if(p.style) document.getElementById('p-st').value=p.style;
-  if(p.budget) document.getElementById('p-bu').value=p.budget;
-  if(p.oak!==undefined) document.getElementById('p-oa').value=p.oak;
-  if(p.tannin!==undefined) document.getElementById('p-ta').value=p.tannin;
-  if(p.acid!==undefined) document.getElementById('p-ac').value=p.acid;
-  if(p.regions) document.getElementById('p-re').value=p.regions;
-  if(p.avoid) document.getElementById('p-av').value=p.avoid;
-  if(p.occasion) document.getElementById('p-oc').value=p.occasion;
-  if(p.extra) document.getElementById('p-ex').value=p.extra;
+  const fields={name:'p-name',style:'p-st',budget:'p-bu',oak:'p-oa',tannin:'p-ta',acid:'p-ac',regions:'p-re',avoid:'p-av',occasion:'p-oc',extra:'p-ex'};
+  Object.entries(fields).forEach(([k,id])=>{ if(p[k]!==undefined&&document.getElementById(id)) document.getElementById(id).value=p[k]; });
 }
-
 function savePrefs(){
   const d=getData();
-  d.preferences={
-    name:document.getElementById('p-name').value,
-    style:document.getElementById('p-st').value,
-    budget:document.getElementById('p-bu').value,
-    oak:document.getElementById('p-oa').value,
-    tannin:document.getElementById('p-ta').value,
-    acid:document.getElementById('p-ac').value,
-    regions:document.getElementById('p-re').value,
-    avoid:document.getElementById('p-av').value,
-    occasion:document.getElementById('p-oc').value,
-    extra:document.getElementById('p-ex').value
-  };
-  setData(d);
-  chatInited=false; // reset chat zodat welkomstbericht ververst
-  document.getElementById('pref-ok-txt').textContent='Profiel opgeslagen! De sommelier gebruikt dit voortaan voor al je adviezen.';
+  d.preferences={name:document.getElementById('p-name').value,style:document.getElementById('p-st').value,budget:document.getElementById('p-bu').value,oak:document.getElementById('p-oa').value,tannin:document.getElementById('p-ta').value,acid:document.getElementById('p-ac').value,regions:document.getElementById('p-re').value,avoid:document.getElementById('p-av').value,occasion:document.getElementById('p-oc').value,extra:document.getElementById('p-ex').value};
+  setData(d); chatInited=false;
+  initApp();
+  document.getElementById('pref-ok-txt').textContent='Profiel opgeslagen! De sommelier gebruikt dit voor al je adviezen.';
   document.getElementById('pref-ok').classList.add('show');
 }
 
 // INIT
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 checkSetup();
-renderKelder();
 </script>
 </body>
 </html>
