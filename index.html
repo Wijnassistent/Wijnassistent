@@ -398,7 +398,7 @@ async function claude(prompt,system,b64,mt){
   if(b64) content.push({type:'image',source:{type:'base64',media_type:mt,data:b64}});
   content.push({type:'text',text:prompt});
   const r=await fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:system||'Je bent een expert wijn sommelier. Antwoord altijd in het Nederlands.',messages:[{role:'user',content}]})});
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system:system||'Je bent een expert wijn sommelier. Antwoord altijd in het Nederlands.',messages:[{role:'user',content}]})});
   const j=await r.json();
   if(!r.ok) throw new Error(`API fout ${r.status}: ${j.error?.message||JSON.stringify(j)}`);
   if(j.error) throw new Error(j.error.message);
