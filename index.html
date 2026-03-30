@@ -141,6 +141,31 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
 </head>
 <body>
 
+<!-- SETUP SCREEN -->
+<div id="setup-screen" style="display:none;position:fixed;inset:0;background:var(--black);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;">
+  <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style="width:60px;height:75px;margin-bottom:1rem">
+    <g fill="none" stroke="#C9A24A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="translate(100,40)">
+        <path d="M40 0 Q100 -10 160 0 Q150 90 100 110 Q50 90 40 0 Z"/>
+        <path d="M55 55 Q100 65 145 55"/>
+        <line x1="100" y1="110" x2="100" y2="190"/>
+        <path d="M70 210 Q100 225 130 210"/>
+      </g>
+    </g>
+  </svg>
+  <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--gold);letter-spacing:0.12em;margin-bottom:0.3rem">Somly</h1>
+  <p style="font-size:0.6rem;letter-spacing:0.28em;color:var(--muted);margin-bottom:2rem">SLIMME WIJNEN · BETERE KEUZES</p>
+  <div style="width:100%;max-width:400px">
+    <p style="font-size:0.78rem;color:var(--cream);line-height:1.7;margin-bottom:1.5rem">Voer je Anthropic API key in om Somly te activeren. Je key wordt alleen op dit apparaat opgeslagen.</p>
+    <label style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;display:block;text-align:left">API Key</label>
+    <input type="password" id="setup-key" placeholder="sk-ant-api03-..." style="width:100%;background:rgba(0,0,0,0.4);border:0.5px solid var(--border);border-radius:2px;color:var(--cream);font-family:'Raleway',sans-serif;font-size:0.82rem;padding:0.65rem 0.85rem;margin-bottom:1rem;outline:none;">
+    <button onclick="saveKey()" style="width:100%;background:linear-gradient(135deg,var(--gold),#8A6020);border:none;color:var(--black);font-family:'Raleway',sans-serif;font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.8rem;cursor:pointer;border-radius:1px;font-weight:500">Activeren</button>
+    <p style="font-size:0.65rem;color:var(--muted);margin-top:1rem;line-height:1.6">Haal je key op via <span style="color:var(--gold)">console.anthropic.com</span> → API Keys</p>
+  </div>
+</div>
+
+<div id="app">
+
 <header>
   <div class="logo-wrap">
     <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
@@ -328,6 +353,9 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
     <label>Extra info</label>
     <textarea id="p-ex" placeholder="bijv. ik bewaar sommige flessen 5+ jaar..."></textarea>
     <button class="btn btn-primary" onclick="savePrefs()">Profiel Opslaan</button>
+    <div style="margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border)">
+      <button class="btn" onclick="resetKey()" style="font-size:0.58rem;color:var(--muted);border-color:var(--muted)">API Key wijzigen</button>
+    </div>
     <div class="ai-box" id="pref-ok" style="margin-top:0.8rem">
       <div class="ai-label">✦ Opgeslagen</div>
       <p id="pref-ok-txt"></p>
@@ -337,10 +365,36 @@ input[type=range] { width:100%; accent-color:var(--gold); background:none; borde
 
 </main>
 
+</div><!-- end app -->
+
 <script>
-const KEY = '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';
 const API = 'https://api.anthropic.com/v1/messages';
 let detected = [];
+
+function getKey(){ return localStorage.getItem('somly_key')||''; }
+function setKey(k){ localStorage.setItem('somly_key',k); }
+
+function checkSetup(){
+  if(!getKey()){
+    document.getElementById('setup-screen').style.display='flex';
+    document.getElementById('app').style.display='none';
+  } else {
+    document.getElementById('setup-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+  }
+}
+
+function saveKey(){
+  const k=document.getElementById('setup-key').value.trim();
+  if(!k.startsWith('sk-ant-')){ alert('Ongeldige key — moet beginnen met sk-ant-'); return; }
+  setKey(k);
+  checkSetup();
+  renderKelder();
+}
+
+function resetKey(){
+  if(confirm('API key verwijderen?')){ localStorage.removeItem('somly_key'); checkSetup(); }
+}
 
 function getData(){ try{return JSON.parse(localStorage.getItem('somly')||'{}')}catch{return{}} }
 function setData(d){ try{localStorage.setItem('somly',JSON.stringify(d))}catch{} }
@@ -397,7 +451,7 @@ async function claude(prompt,system,b64,mt){
   const content=[];
   if(b64) content.push({type:'image',source:{type:'base64',media_type:mt,data:b64}});
   content.push({type:'text',text:prompt});
-  const r=await fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+  const r=await fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
     body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system:system||'Je bent een expert wijn sommelier. Antwoord altijd in het Nederlands.',messages:[{role:'user',content}]})});
   const j=await r.json();
   if(!r.ok) throw new Error(`API fout ${r.status}: ${j.error?.message||JSON.stringify(j)}`);
@@ -585,6 +639,7 @@ function savePrefs(){
 }
 
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+checkSetup();
 renderKelder();
 </script>
 </body>
